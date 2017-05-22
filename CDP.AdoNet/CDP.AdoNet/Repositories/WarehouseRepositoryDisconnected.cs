@@ -18,24 +18,46 @@ namespace CDP.AdoNet.Repositories
 
         public void Create(Warehouse obj, bool isCommitted, IsolationLevel level)
         {
-            var adapter = new SqlDataAdapter();
-            const string query = "INSERT dbo.Warehouse (Id, City, State) VALUES(@Id, @City, @State)";
+            //var adapter = new SqlDataAdapter();
+            //const string query = "INSERT dbo.Warehouse (Id, City, State) VALUES(@Id, @City, @State)";
+            //using (var command = new SqlCommand(query, _connection))
+            //{
+            //    try
+            //    {
+            //        _connection.Open();
+            //        command.Parameters.AddWithValue("@Id", obj.Id);
+            //        command.Parameters.AddWithValue("@City", obj.City);
+            //        command.Parameters.AddWithValue("@State", obj.State);
+            //        adapter.InsertCommand = command;
+            //        adapter.InsertCommand.ExecuteNonQuery();
+            //        _connection.Close();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine("An exception: " + ex.Message + " was encountered while operation.");
+            //    }
+            //}
+            const string query = "SELECT Id, City, State FROM dbo.Warehouse";
+
             using (var command = new SqlCommand(query, _connection))
             {
-                try
-                {
-                    _connection.Open();
-                    command.Parameters.AddWithValue("@Id", obj.Id);
-                    command.Parameters.AddWithValue("@City", obj.City);
-                    command.Parameters.AddWithValue("@State", obj.State);
-                    adapter.InsertCommand = command;
-                    adapter.InsertCommand.ExecuteNonQuery();
-                    _connection.Close();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("An exception: " + ex.Message + " was encountered while operation.");
-                }
+                _connection.Open();
+                var adapter = new SqlDataAdapter();
+                adapter.TableMappings.Add("Table", "Items");
+                adapter.SelectCommand = command;
+                var dataSet = new DataSet("Itms");
+                adapter.Fill(dataSet);
+                _connection.Close();
+                DataRow anyRow = dataSet.Tables["Items"].NewRow();
+                anyRow["Id"] = obj.Id;
+                anyRow["City"] = obj.City;
+                anyRow["State"] = obj.State;
+                dataSet.Tables["Items"].Rows.Add(anyRow);
+                var commandBuilder = new SqlCommandBuilder(adapter);
+                adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
+                _connection.Open();
+                adapter.Update(dataSet);
+                _connection.Close();
             }
         }
 
@@ -95,25 +117,45 @@ namespace CDP.AdoNet.Repositories
 
         public void Delete(int id, bool isCommitted, IsolationLevel level)
         {
-            var adapter = new SqlDataAdapter();
-            const string query =
-                "DELETE FROM dbo.RouteOfCargo WHERE OriginWarehouseId = @Id OR DestinationWarehouseId = @Id;"+
-                "DELETE FROM dbo.Warehouse WHERE Id = @Id; ";
+            const string query = "SELECT Id, City, State FROM dbo.Warehouse";
+
             using (var command = new SqlCommand(query, _connection))
             {
-                try
-                {
-                    _connection.Open();
-                    command.Parameters.AddWithValue("@Id", id);
-                    adapter.DeleteCommand = command;
-                    adapter.DeleteCommand.ExecuteNonQuery();
-                    _connection.Close();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("An exception: " + ex.Message + " was encountered while operation.");
-                }
+                _connection.Open();
+                var adapter = new SqlDataAdapter();
+                adapter.TableMappings.Add("Table", "Items");
+                adapter.SelectCommand = command;
+                var dataSet = new DataSet("Itms");
+                adapter.Fill(dataSet);
+                _connection.Close();
+                var row =
+                   dataSet.Tables["Items"].Select($"Id = '{id}'");
+                row[0].Delete();
+                var commandBuilder = new SqlCommandBuilder(adapter);
+                adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
+                _connection.Open();
+                adapter.Update(dataSet);
+                _connection.Close();
             }
+            //var adapter = new SqlDataAdapter();
+            //const string query =
+            //    "DELETE FROM dbo.RouteOfCargo WHERE OriginWarehouseId = @Id OR DestinationWarehouseId = @Id;"+
+            //    "DELETE FROM dbo.Warehouse WHERE Id = @Id; ";
+            //using (var command = new SqlCommand(query, _connection))
+            //{
+            //    try
+            //    {
+            //        _connection.Open();
+            //        command.Parameters.AddWithValue("@Id", id);
+            //        adapter.DeleteCommand = command;
+            //        adapter.DeleteCommand.ExecuteNonQuery();
+            //        _connection.Close();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine("An exception: " + ex.Message + " was encountered while operation.");
+            //    }
+            //}
         }
     }
 }

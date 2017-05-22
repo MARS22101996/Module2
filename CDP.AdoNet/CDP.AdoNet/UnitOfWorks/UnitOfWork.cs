@@ -23,7 +23,7 @@ namespace CDP.AdoNet.Repositories
 
         public IRouteRepositoryConnected RouteRepositoryConnected => _routeRepositoryConnected ?? (_routeRepositoryConnected = new RouteRepositoryConnected(_connectionString));
 
-        public IRouteRepositoryConnected RouteRepositoryDisonnected => _routeRepositoryConnected ?? (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connectionString));
+        public IRouteRepositoryConnected RouteRepositoryDisconnected => _routeRepositoryConnected ?? (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connectionString));
 
         public UnitOfWork()
         {

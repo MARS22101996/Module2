@@ -8,6 +8,6 @@
 
         IRouteRepositoryConnected RouteRepositoryConnected { get; }
 
-        IRouteRepositoryConnected RouteRepositoryDisonnected { get; }
+        IRouteRepositoryConnected RouteRepositoryDisconnected { get; }
     }
 }
