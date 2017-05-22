@@ -121,23 +121,42 @@ namespace CDP.AdoNet.Repositories
 
         public void Delete(int id, bool isCommitted, IsolationLevel level)
         {
-            var adapter = new SqlDataAdapter();
             const string query = "DELETE from dbo.RouteOfCargo WHERE Id = @Id";
             using (var command = new SqlCommand(query, _connection))
             {
-                try
-                {
-                    _connection.Open();
-                    command.Parameters.AddWithValue("@Id", id);
-                    adapter.DeleteCommand = command;
-                    adapter.DeleteCommand.ExecuteNonQuery();
-                    _connection.Close();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("An exception: " + ex.Message + " was encountered while operation.");
-                }
+                _connection.Open();
+                var adapter = new SqlDataAdapter();
+                adapter.TableMappings.Add("Table", "Items");
+                adapter.SelectCommand = command;
+                var dataSet = new DataSet("Itms");
+                adapter.Fill(dataSet);
+                _connection.Close();
+                var row =
+                   dataSet.Tables["Items"].Select($"Id = '{id}'");
+                row[0].Delete();
+                var commandBuilder = new SqlCommandBuilder(adapter);
+                adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
+                _connection.Open();
+                adapter.Update(dataSet);
+                _connection.Close();
             }
+            //var adapter = new SqlDataAdapter();
+            //const string query = "DELETE from dbo.RouteOfCargo WHERE Id = @Id";
+            //using (var command = new SqlCommand(query, _connection))
+            //{
+            //    try
+            //    {
+            //        _connection.Open();
+            //        command.Parameters.AddWithValue("@Id", id);
+            //        adapter.DeleteCommand = command;
+            //        adapter.DeleteCommand.ExecuteNonQuery();
+            //        _connection.Close();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine("An exception: " + ex.Message + " was encountered while operation.");
+            //    }
+            //}
         }
     }
 }

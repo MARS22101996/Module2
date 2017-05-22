@@ -66,7 +66,7 @@ namespace CDP.AdoNet.Repositories
             {
                 SetParameters(command, obj);
                 ExecuteQuery(command, isCommitted, level);
-            }            
+            }
         }
 
         public IEnumerable<Warehouse> GetAll()

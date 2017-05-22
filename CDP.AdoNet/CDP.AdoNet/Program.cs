@@ -38,9 +38,9 @@ namespace CDP.AdoNet
             ////////
             //var w22 = new Warehouse() { Id = 298, City = "Sity", State = "State" };
             //uow.WarehouseRepositoryDisconnected.Create(w22, true, System.Data.IsolationLevel.ReadCommitted);
-            //var w2 = new Warehouse() { Id = 294, City = "Sity2", State = "State2" };
-            //uow.WarehouseRepositoryDisconnected.Update(w2, true, System.Data.IsolationLevel.ReadCommitted);
-            uow.WarehouseRepositoryDisconnected.Delete(297, true, System.Data.IsolationLevel.ReadCommitted);
+            var w2 = new Warehouse() { Id = 293, City = "Sity3", State = "State3" };
+            uow.WarehouseRepositoryDisconnected.Update(w2, true, System.Data.IsolationLevel.ReadCommitted);
+            //uow.WarehouseRepositoryDisconnected.Delete(297, true, System.Data.IsolationLevel.ReadCommitted);
 
             var list2 = uow.WarehouseRepositoryDisconnected.GetAll().ToList();
             foreach (var item in list2)
