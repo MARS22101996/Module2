@@ -1,5 +1,6 @@
 ﻿using CDP.AdoNet.Models;
 using CDP.AdoNet.Repositories;
+using CDP.AdoNet.UnitOfWorks;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -18,7 +19,7 @@ namespace CDP.AdoNet
             //uow.WarehouseRepositoryConnected.Create(w, true, System.Data.IsolationLevel.ReadCommitted);
             //var w1 = new Warehouse() { Id = 297, City = "Sity1", State = "State1" };
             //uow.WarehouseRepositoryConnected.Update(w1, true, System.Data.IsolationLevel.ReadCommitted);
-            uow.WarehouseRepositoryConnected.Delete(298, true, System.Data.IsolationLevel.ReadCommitted);
+            uow.WarehouseRepositoryConnected.Delete(290, true, System.Data.IsolationLevel.ReadCommitted);
             //var list = uow.WarehouseRepositoryConnected.GetAll().ToList();
             //foreach (var item in list)
             //{
@@ -53,23 +54,25 @@ namespace CDP.AdoNet
 
 
 
-            //var adapter = new SqlDataAdapter();
-            //var dataSet = uow.RouteRepositoryDisconnected.GetAll(adapter);
+            var adapter = new SqlDataAdapter();
+            var dataSet = uow.RouteRepositoryDisconnected.GetAll(adapter);
             //var r1 = new RouteOfCargo() { Id = 100000, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
-            //var r2= new RouteOfCargo() { Id = 6, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
+            //var r2 = new RouteOfCargo() { Id = 6, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
             //var created = uow.RouteRepositoryDisconnected.Create(dataSet, adapter, r1);
             //var updated = uow.RouteRepositoryDisconnected.Update(dataSet, adapter, r2);
             //var deleted = uow.RouteRepositoryDisconnected.Delete(dataSet, adapter, 5);
             //uow.RouteRepositoryDisconnected.Save(adapter, dataSet);
 
-            //var adapter1 = new SqlDataAdapter();
-            //var dataSet1 = uow.WarehouseRepositoryDisconnected.GetAll(adapter1);
-            //var w = new Warehouse() { Id = 299, City = "Sity299", State = "State" };
-            //var w1 = new Warehouse() { Id = 291, City = "Sity", State = "State" };
-            //var created1 = uow.WarehouseRepositoryDisconnected.Create(dataSet1, adapter1, w);
-            //var updated1 = uow.WarehouseRepositoryDisconnected.Update(dataSet1, adapter1, w1);
-            //var deleted1 = uow.WarehouseRepositoryDisconnected.Delete(dataSet1, adapter1, 292);
-            //uow.WarehouseRepositoryDisconnected.Save(adapter1, dataSet1);
+            var adapter1 = new SqlDataAdapter();
+            var dataSet1 = uow.WarehouseRepositoryDisconnected.GetAll(adapter1);
+            var w = new Warehouse() { Id = 300, City = "Sity299", State = "State" };
+            var w1 = new Warehouse() { Id = 291, City = "Sity", State = "State" };
+            var created1 = uow.WarehouseRepositoryDisconnected.Create(dataSet1, adapter1, w);
+            var updated1 = uow.WarehouseRepositoryDisconnected.Update(dataSet1, adapter1, w1);
+            var deleted = uow.RouteRepositoryDisconnected.DeleteByWarehouseId(dataSet, adapter, 293);
+            uow.RouteRepositoryDisconnected.Save(adapter, dataSet);
+            var deleted1 = uow.WarehouseRepositoryDisconnected.Delete(dataSet1, adapter1, 293);
+            uow.WarehouseRepositoryDisconnected.Save(adapter1, dataSet1);
 
             //uow.RouteRepositoryDisconnected.Delete(1, true, System.Data.IsolationLevel.ReadCommitted);
 

@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using CDP.AdoNet.Interfaces;
 using System.Data.SqlClient;
 using CDP.AdoNet.Models;
 
 namespace CDP.AdoNet.Repositories
 {
-    public class RouteRepositoryDisconnected : IRepositoryDisconnected<RouteOfCargo>
+    public class RouteRepositoryDisconnected : IRouteRepositoryDisconnected
     {
-        private readonly SqlConnection _connection;
+        private SqlConnection Connection { get; }
 
         public RouteRepositoryDisconnected(SqlConnection connectionString)
         {
-            _connection = connectionString;
+            Connection = connectionString;
         }
 
         public DataSet Create(DataSet dataSet, SqlDataAdapter adapter, RouteOfCargo obj)
@@ -25,7 +23,7 @@ namespace CDP.AdoNet.Repositories
             dataSet.Tables["RouteOfCargo"].Rows.Add(anyRow);
             var commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-            return dataSet;           
+            return dataSet;
         }
 
 
@@ -33,14 +31,14 @@ namespace CDP.AdoNet.Repositories
         {
             const string query = "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo";
 
-            using (var command = new SqlCommand(query, _connection))
+            using (var command = new SqlCommand(query, Connection))
             {
-                _connection.Open();
+                Connection.Open();
                 adapter.TableMappings.Add("Table", "RouteOfCargo");
                 adapter.SelectCommand = command;
                 var dataSet = new DataSet("RouteOfCargo");
                 adapter.Fill(dataSet);
-                _connection.Close();
+                Connection.Close();
                 return dataSet;
             }
         }
@@ -59,15 +57,27 @@ namespace CDP.AdoNet.Repositories
 
         public void Save(SqlDataAdapter adapter, DataSet dataSet)
         {
-            _connection.Open();
+            Connection.Open();
             adapter.Update(dataSet);
-            _connection.Close();
+            Connection.Close();
         }
         public DataSet Delete(DataSet dataSet, SqlDataAdapter adapter, int id)
         {
             var row =
                dataSet.Tables["RouteOfCargo"].Select($"Id = '{id}'");
             row[0].Delete();
+            var commandBuilder = new SqlCommandBuilder(adapter);
+            adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
+            return dataSet;
+        }
+        public DataSet DeleteByWarehouseId(DataSet dataSet, SqlDataAdapter adapter, int id)
+        {
+            var rows =
+               dataSet.Tables["RouteOfCargo"].Select($"OriginWarehouseId = '{id}' OR DestinationWarehouseId = '{id}'");
+            foreach (var row in rows)
+            {
+                row.Delete();
+            }
             var commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
             return dataSet;

@@ -108,7 +108,8 @@ namespace CDP.AdoNet.Repositories
 
         public void Delete(int id, bool isCommitted, IsolationLevel level)
         {
-            var query = "DELETE from dbo.Warehouse WHERE Id = @Id";
+            var query = "DELETE FROM dbo.RouteOfCargo WHERE OriginWarehouseId = @Id " +
+                        "OR DestinationWarehouseId = @Id; DELETE from dbo.Warehouse WHERE Id = @Id";
             using (var command = new SqlCommand(query, _connection))
             {
                 command.Parameters.AddWithValue("@Id", id);

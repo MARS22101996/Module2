@@ -1,10 +1,11 @@
-﻿using CDP.AdoNet.Interfaces;
-using System.Data.SqlClient;
+﻿using System;
 using System.Configuration;
-using System;
+using System.Data.SqlClient;
+using CDP.AdoNet.Interfaces;
 using CDP.AdoNet.Models;
+using CDP.AdoNet.Repositories;
 
-namespace CDP.AdoNet.Repositories
+namespace CDP.AdoNet.UnitOfWorks
 {
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
@@ -16,7 +17,7 @@ namespace CDP.AdoNet.Repositories
 
         private IRepository<RouteOfCargo> _routeRepositoryConnected;
 
-        private IRepositoryDisconnected<RouteOfCargo> _routeRepositoryDisconnected;
+        private IRouteRepositoryDisconnected _routeRepositoryDisconnected;
 
         public IRepository<Warehouse> WarehouseRepositoryConnected => _warehouseRepositoryConnected ?? (_warehouseRepositoryConnected = new WarehouseRepositoryConnected(_connectionString));
 
@@ -24,25 +25,25 @@ namespace CDP.AdoNet.Repositories
 
         public IRepository<RouteOfCargo> RouteRepositoryConnected => _routeRepositoryConnected ?? (_routeRepositoryConnected = new RouteRepositoryConnected(_connectionString));
 
-        public IRepositoryDisconnected<RouteOfCargo> RouteRepositoryDisconnected => _routeRepositoryDisconnected ?? (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connectionString));
+        public IRouteRepositoryDisconnected RouteRepositoryDisconnected => _routeRepositoryDisconnected ?? (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connectionString));
 
         public UnitOfWork()
         {
             string conString = ConfigurationManager.ConnectionStrings["CDPDatabase"].ToString();
-            _connectionString = new SqlConnection(conString);           
+            _connectionString = new SqlConnection(conString);
         }
 
-        private bool _disposed = false;
+        private bool _disposed;
 
         public virtual void Dispose(bool disposing)
         {
-            if (!this._disposed)
+            if (!_disposed)
             {
                 if (disposing)
                 {
                     _connectionString.Dispose();
                 }
-                this._disposed = true;
+                _disposed = true;
             }
         }
 

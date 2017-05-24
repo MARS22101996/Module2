@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CDP.AdoNet.Models
+﻿namespace CDP.AdoNet.Models
 {
     public class RouteOfCargo
     {
@@ -15,6 +9,5 @@ namespace CDP.AdoNet.Models
         public int DestinationWarehouseId { get; set; }
 
         public float Distance { get; set; }
-
-}
+    }
 }

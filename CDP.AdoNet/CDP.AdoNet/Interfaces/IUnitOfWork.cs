@@ -11,6 +11,6 @@ namespace CDP.AdoNet.Interfaces
 
         IRepository<RouteOfCargo> RouteRepositoryConnected { get; }
 
-        IRepositoryDisconnected<RouteOfCargo> RouteRepositoryDisconnected { get; }
+        IRouteRepositoryDisconnected RouteRepositoryDisconnected { get; }
     }
 }

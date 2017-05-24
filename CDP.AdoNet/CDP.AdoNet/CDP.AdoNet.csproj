@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IRepositoryDisconnected.cs" />
+    <Compile Include="Interfaces\IRouteRepositoryDisconnected.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Models\RouteOfCargo.cs" />
     <Compile Include="Models\Warehouse.cs" />
