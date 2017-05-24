@@ -26,8 +26,9 @@ namespace CDP.AdoNet.Repositories
         {
             using (var cmd = _unitOfWork.CreateCommand())
             {
-                cmd.CommandText = "INSERT dbo.RouteOfCargo (OriginWarehouseId, DestinationWarehouseId, Distance) VALUES" +
-                $"( {obj.OriginWarehouseId} , {obj.DestinationWarehouseId} , {obj.Distance} )";
+                cmd.CommandText = "set IDENTITY_INSERT dbo.RouteOfCargo on;" +
+                                  "INSERT dbo.RouteOfCargo (Id, OriginWarehouseId, DestinationWarehouseId, Distance) VALUES" +
+                                   $"( {obj.Id} , {obj.OriginWarehouseId} , {obj.DestinationWarehouseId} , {obj.Distance} )";
                 cmd.ExecuteNonQuery();
             }
         }
