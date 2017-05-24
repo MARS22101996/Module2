@@ -5,11 +5,10 @@ namespace CDP.AdoNet.Interfaces
 {
     public interface IRepository<T>
     {
-        void Create(T item, bool isCommitted, IsolationLevel level);
-        void Update(T item, bool isCommitted, IsolationLevel level);
-        void Delete(int id, bool isCommitted, IsolationLevel level);
+        void Create(T item );
+        void Update(T item );
+        void Delete(int id );
         IEnumerable<T> GetAll();
-
-        //void GetById(int id);  
-   }
+        T GetById(int id);
+    }
 }

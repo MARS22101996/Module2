@@ -3,118 +3,97 @@ using CDP.AdoNet.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Linq;
+using CDP.AdoNet.UnitOfWorks;
 
 
 namespace CDP.AdoNet.Repositories
 {
     public class WarehouseRepositoryConnected : IRepository<Warehouse>
     {
-        private readonly SqlConnection _connection;
 
-        public WarehouseRepositoryConnected(SqlConnection connectionString)
-        {
-            _connection = connectionString;
-        }
-        private void SetParameters(SqlCommand command, Warehouse obj)
-        {
-            command.Parameters.AddWithValue("@Id", obj.Id);
-            command.Parameters.AddWithValue("@City", obj.City);
-            command.Parameters.AddWithValue("@State", obj.State);
-        }
+        private readonly AdoNetUnitOfWork _unitOfWork;
 
-        private void ExecuteQuery(SqlCommand command, bool isCommitted, IsolationLevel level)
+        public WarehouseRepositoryConnected(IUnitOfWorkAdo uow)
         {
-            _connection.Open();
-            SqlTransaction transaction = _connection.BeginTransaction(level);
-            command.Transaction = transaction;
-            try
-            {
-                command.ExecuteNonQuery();
-                if (isCommitted)
-                {
-                    transaction.Commit();
-                }
-            }
-            catch (Exception e)
-            {
-                try
-                {
-                    transaction.Rollback();
-                }
-                catch (SqlException ex)
-                {
-                    if (transaction.Connection != null)
-                    {
-                        Console.WriteLine("An exception of type " + ex.GetType() +
-                            " was encountered while attempting to roll back the transaction.");
-                    }
-                }
+            if (uow == null)
+                throw new ArgumentNullException("uow");
 
-                Console.WriteLine("An exception: " + e.Message + " was encountered while operation.");
-            }
-            finally
-            {
-                _connection.Close();
-            }
+            _unitOfWork = uow as AdoNetUnitOfWork;
+            if (_unitOfWork == null)
+                throw new NotSupportedException("Ohh my, change that UnitOfWorkFactory, will you?");
         }
 
-        public void Create(Warehouse obj, bool isCommitted, IsolationLevel level)
+        public void Create(Warehouse obj)
         {
-            var query = "INSERT dbo.Warehouse (Id, City, State) VALUES(@Id, @City, @State)";
-            using (SqlCommand command = new SqlCommand(query, _connection))
+            using (var cmd = _unitOfWork.CreateCommand())
             {
-                SetParameters(command, obj);
-                ExecuteQuery(command, isCommitted, level);
+                cmd.CommandText= $"INSERT dbo.Warehouse (Id, City, State) VALUES({obj.Id}, '{obj.City}', '{obj.State}')";
+                cmd.ExecuteNonQuery();
             }
         }
 
         public IEnumerable<Warehouse> GetAll()
-        {        
-            var warehouseList = new List<Warehouse>();
-            var query = "SELECT Id, City, State FROM dbo.Warehouse";
-            using (SqlCommand command = new SqlCommand(query, _connection))
+        {
+            using (var command = _unitOfWork.CreateCommand())
             {
-                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-                DataTable dataTable = new DataTable();
-                _connection.Open();
-                dataAdapter.Fill(dataTable);
-                _connection.Close();
-
-                foreach (DataRow row in dataTable.Rows)
+                command.CommandText = "SELECT Id, City, State FROM dbo.Warehouse";
+                using (var reader = command.ExecuteReader())
                 {
-                    warehouseList.Add(
-                         new Warehouse
-                         {
-                             Id = Convert.ToInt32(row["Id"]),
-                             City = Convert.ToString(row["City"]),
-                             State = Convert.ToString(row["State"])
-                         }
-                         );
+                    var warehouses = new List<Warehouse>();
+                    while (reader.Read())
+                    {
+                        var warehouse = new Warehouse();
+                        Map(reader, warehouse);
+                        warehouses.Add(warehouse);
+                    }
+                    return warehouses;
                 }
-                return warehouseList;
             }
         }
 
-        public void Update(Warehouse obj, bool isCommitted, IsolationLevel level)
+        public void Update(Warehouse obj)
         {
-            var query = "UPDATE dbo.Warehouse SET City = @City, State = @State WHERE Id = @Id";
-            using (var command = new SqlCommand(query, _connection))
+            using (var cmd = _unitOfWork.CreateCommand())
             {
-                SetParameters(command, obj);
-                ExecuteQuery(command, isCommitted, level);
+                cmd.CommandText = $"UPDATE dbo.Warehouse SET City = '{obj.City}', State = '{obj.State}' WHERE Id = {obj.Id}";
+                cmd.ExecuteNonQuery();
             }
         }
 
-        public void Delete(int id, bool isCommitted, IsolationLevel level)
+        public void Delete(int id)
         {
-            var query = "DELETE FROM dbo.RouteOfCargo WHERE OriginWarehouseId = @Id " +
-                        "OR DestinationWarehouseId = @Id; DELETE from dbo.Warehouse WHERE Id = @Id";
-            using (var command = new SqlCommand(query, _connection))
+            using (var cmd = _unitOfWork.CreateCommand())
             {
-                command.Parameters.AddWithValue("@Id", id);
-                ExecuteQuery(command, isCommitted, level);
+                cmd.CommandText = $"DELETE FROM dbo.RouteOfCargo WHERE OriginWarehouseId = {id} " +
+                        $"OR DestinationWarehouseId = {id}; DELETE from dbo.Warehouse WHERE Id = {id}";
+                cmd.ExecuteNonQuery();
             }
+        }
+
+        public Warehouse GetById(int id)
+        {
+            using (var command = _unitOfWork.CreateCommand())
+            {
+                command.CommandText = $"SELECT Id, City, State FROM dbo.Warehouse  WHERE Id = {id}";
+                using (var reader = command.ExecuteReader())
+                {
+                    var warehouses = new List<Warehouse>();
+                    while (reader.Read())
+                    {
+                        var warehouse = new Warehouse();
+                        Map(reader, warehouse);
+                        warehouses.Add(warehouse);
+                    }
+                    return warehouses.FirstOrDefault();
+                }
+            }
+        }
+        private void Map(IDataRecord record, Warehouse warehouse)
+        {
+            warehouse.Id = (int)record["Id"];
+            warehouse.City = record["City"].ToString();
+            warehouse.State = record["State"].ToString();
         }
     }
 }

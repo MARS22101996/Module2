@@ -1,123 +1,101 @@
 ﻿using CDP.AdoNet.Interfaces;
 using CDP.AdoNet.Models;
+using CDP.AdoNet.UnitOfWorks;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Linq;
 
 namespace CDP.AdoNet.Repositories
 {
     public class RouteRepositoryConnected : IRepository<RouteOfCargo>
     {
-        private readonly SqlConnection _connection;
+        private readonly AdoNetUnitOfWork _unitOfWork;
 
-        public RouteRepositoryConnected(SqlConnection connectionString)
+        public RouteRepositoryConnected(IUnitOfWorkAdo uow)
         {
-            _connection = connectionString;
+            if (uow == null)
+                throw new ArgumentNullException("uow");
+
+            _unitOfWork = uow as AdoNetUnitOfWork;
+            if (_unitOfWork == null)
+                throw new NotSupportedException("Ohh my, change that UnitOfWorkFactory, will you?");
         }
 
-        private void SetParameters(SqlCommand command, RouteOfCargo obj)
+        public void Create(RouteOfCargo obj)
         {
-            command.Parameters.AddWithValue("@Id", obj.Id);
-            command.Parameters.AddWithValue("@OriginWarehouseId", obj.OriginWarehouseId);
-            command.Parameters.AddWithValue("@DestinationWarehouseId", obj.DestinationWarehouseId);
-            command.Parameters.AddWithValue("@Distance", obj.Distance);
-        }
-
-        private void ExecuteQuery(SqlCommand command, bool isCommitted, IsolationLevel level)
-        {
-            _connection.Open();
-            SqlTransaction transaction = _connection.BeginTransaction(level);
-            command.Transaction = transaction;
-            try
+            using (var cmd = _unitOfWork.CreateCommand())
             {
-                command.ExecuteNonQuery();
-                if (isCommitted)
-                {
-                    transaction.Commit();
-                }
-            }
-            catch (Exception e)
-            {
-                try
-                {
-                    transaction.Rollback();
-                }
-                catch (SqlException ex)
-                {
-                    if (transaction.Connection != null)
-                    {
-                        Console.WriteLine("An exception of type " + ex.GetType() +
-                            " was encountered while attempting to roll back the transaction.");
-                    }
-                }
-
-                Console.WriteLine("An exception of type " + e.GetType() +
-                    " was encountered while operation.");
-            }
-            finally
-            {
-                _connection.Close();
-            }
-        }
-        public void Create(RouteOfCargo obj, bool isCommitted, IsolationLevel level)
-        {
-            var query = "INSERT dbo.RouteOfCargo (OriginWarehouseId, DestinationWarehouseId, Distance) VALUES"+
-                "( @OriginWarehouseId, @DestinationWarehouseId, @Distance)";
-            using (SqlCommand command = new SqlCommand(query, _connection))
-            {
-                SetParameters(command, obj);
-                ExecuteQuery(command, isCommitted, level);
+                cmd.CommandText = "INSERT dbo.RouteOfCargo (OriginWarehouseId, DestinationWarehouseId, Distance) VALUES" +
+                $"( {obj.OriginWarehouseId} , {obj.DestinationWarehouseId} , {obj.Distance} )";
+                cmd.ExecuteNonQuery();
             }
         }
 
         public IEnumerable<RouteOfCargo> GetAll()
         {
-            var warehouseList = new List<RouteOfCargo>();
-            var query = "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo";
-            using (SqlCommand command = new SqlCommand(query, _connection))
+            using (var command = _unitOfWork.CreateCommand())
             {
-                SqlDataAdapter dataAdapter = new SqlDataAdapter(command);
-                DataTable dataTable = new DataTable();
-                _connection.Open();
-                dataAdapter.Fill(dataTable);
-                _connection.Close();
-
-                foreach (DataRow row in dataTable.Rows)
+                command.CommandText = "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo";
+                using (var reader = command.ExecuteReader())
                 {
-                    warehouseList.Add(
-                         new RouteOfCargo
-                         {
-                             Id = Convert.ToInt32(row["Id"]),
-                             OriginWarehouseId = Convert.ToInt32(row["OriginWarehouseId"]),
-                             DestinationWarehouseId = Convert.ToInt32(row["DestinationWarehouseId"]),
-                             Distance = Convert.ToInt32(row["Distance"])
-                         }
-                    );
+                    var routes = new List<RouteOfCargo>();
+                    while (reader.Read())
+                    {
+                        var route = new RouteOfCargo();
+                        Map(reader, route);
+                        routes.Add(route);
+                    }
+                    return routes;
                 }
-                return warehouseList;
             }
         }
 
-        public void Update(RouteOfCargo obj, bool isCommitted, IsolationLevel level)
+        public void Update(RouteOfCargo obj)
         {
-            var query = "UPDATE dbo.RouteOfCargo SET OriginWarehouseId = @OriginWarehouseId,"+
-                " DestinationWarehouseId = @DestinationWarehouseId, Distance = @Distance WHERE Id = @Id";
-            using (SqlCommand command = new SqlCommand(query, _connection))
+            using (var cmd = _unitOfWork.CreateCommand())
             {
-                SetParameters(command, obj);
-                ExecuteQuery(command, isCommitted, level);
+                cmd.CommandText = $"UPDATE dbo.RouteOfCargo SET OriginWarehouseId = {obj.OriginWarehouseId}," +
+                $" DestinationWarehouseId = {obj.DestinationWarehouseId}, Distance = {obj.Distance} WHERE Id = {obj.Id}";
+                cmd.ExecuteNonQuery();
             }
         }
 
-        public void Delete(int id, bool isCommitted, IsolationLevel level)
+        public void Delete(int id)
         {
-            var query = "DELETE from dbo.RouteOfCargo WHERE Id = @Id";
-            using (SqlCommand command = new SqlCommand(query, _connection))
+            using (var cmd = _unitOfWork.CreateCommand())
             {
-                command.Parameters.AddWithValue("@Id", id);
-                ExecuteQuery(command, isCommitted, level);
+                cmd.CommandText = $"DELETE from dbo.RouteOfCargo WHERE Id = {id}";
+                cmd.ExecuteNonQuery();
             }
+        }
+
+        public RouteOfCargo GetById(int id)
+        {
+            using (var command = _unitOfWork.CreateCommand())
+            {
+                command.CommandText = "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo " +
+                                      $"WHERE Id = {id}";
+                using (var reader = command.ExecuteReader())
+                {
+                    var routes = new List<RouteOfCargo>();
+                    while (reader.Read())
+                    {
+                        var route = new RouteOfCargo();
+                        Map(reader, route);
+                        routes.Add(route);
+                    }
+                    return routes.FirstOrDefault();
+                }
+            }
+        }
+
+        private void Map(IDataRecord record, RouteOfCargo route)
+        {
+            route.Id = (int)record["Id"];
+            route.OriginWarehouseId = (int) (record["OriginWarehouseId"]);
+            route.DestinationWarehouseId = (int)(record["DestinationWarehouseId"]);
+            route.Distance = Convert.ToInt32(record["Distance"]);
         }
     }
 }

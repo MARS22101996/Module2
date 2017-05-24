@@ -26,7 +26,6 @@ namespace CDP.AdoNet.Repositories
             return dataSet;
         }
 
-
         public DataSet GetAll(SqlDataAdapter adapter)
         {
             const string query = "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo";
@@ -70,6 +69,7 @@ namespace CDP.AdoNet.Repositories
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
             return dataSet;
         }
+
         public DataSet DeleteByWarehouseId(DataSet dataSet, SqlDataAdapter adapter, int id)
         {
             var rows =

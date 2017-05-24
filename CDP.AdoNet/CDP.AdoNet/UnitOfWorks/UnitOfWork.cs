@@ -11,19 +11,19 @@ namespace CDP.AdoNet.UnitOfWorks
     {
         private readonly SqlConnection _connectionString;
 
-        private IRepository<Warehouse>  _warehouseRepositoryConnected;
+        //private IRepository<Warehouse> _warehouseRepositoryConnected;
 
         private IRepositoryDisconnected<Warehouse> _warehouseRepositoryDisconnected;
 
-        private IRepository<RouteOfCargo> _routeRepositoryConnected;
+        //private IRepository<RouteOfCargo> _routeRepositoryConnected;
 
         private IRouteRepositoryDisconnected _routeRepositoryDisconnected;
 
-        public IRepository<Warehouse> WarehouseRepositoryConnected => _warehouseRepositoryConnected ?? (_warehouseRepositoryConnected = new WarehouseRepositoryConnected(_connectionString));
+        //public IRepository<Warehouse> WarehouseRepositoryConnected => _warehouseRepositoryConnected ?? (_warehouseRepositoryConnected = new WarehouseRepositoryConnected(_connectionString));
 
         public IRepositoryDisconnected<Warehouse> WarehouseRepositoryDisconnected => _warehouseRepositoryDisconnected ?? (_warehouseRepositoryDisconnected = new WarehouseRepositoryDisconnected(_connectionString));
 
-        public IRepository<RouteOfCargo> RouteRepositoryConnected => _routeRepositoryConnected ?? (_routeRepositoryConnected = new RouteRepositoryConnected(_connectionString));
+        //public IRepository<RouteOfCargo> RouteRepositoryConnected => _routeRepositoryConnected ?? (_routeRepositoryConnected = new RouteRepositoryConnected(_connectionString));
 
         public IRouteRepositoryDisconnected RouteRepositoryDisconnected => _routeRepositoryDisconnected ?? (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connectionString));
 

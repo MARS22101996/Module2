@@ -1,12 +1,6 @@
 ﻿using CDP.AdoNet.Models;
 using CDP.AdoNet.Repositories;
 using CDP.AdoNet.UnitOfWorks;
-using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CDP.AdoNet
 {
@@ -14,12 +8,104 @@ namespace CDP.AdoNet
     {
         static void Main(string[] args)
         {
-            var uow = new UnitOfWork();
+            //using (var uow = UnitOfWorkFactory.Create())
+            //{
+            //    var repos = new WarehouseRepositoryConnected(uow);
+
+            //    var checkBeforeCreate = repos.GetById(308);
+
+            //    var checkBeforeUpdate = repos.GetById(308);
+
+            //    var checkBeforeDelete = repos.GetById(289);
+
+            //    var wCreate = new Warehouse() { Id = 308, City = "Sity308", State = "State308" };
+
+            //    repos.Create(wCreate);
+
+            //    var wUpdate = new Warehouse() { Id = 304, City = "SityUpdate", State = "StateUpdate" };
+
+            //    repos.Update(wUpdate);
+
+            //    repos.Delete(289);
+
+            //    var checkAfterUpdate = repos.GetById(304);
+
+            //    var checkAfterCreate = repos.GetById(308);
+
+            //    var checkAfterDelete = repos.GetById(289);
+
+            //    uow.Rollback();
+
+            //    var checkCreateAfterRollback= repos.GetById(308);
+
+            //    var checkUpdateAfterRollback = repos.GetById(304);
+
+            //    var checkDeleteAfterRollback = repos.GetById(289);
+
+            //}
+
+            using (var uow = UnitOfWorkFactory.Create())
+            {
+                var repos = new RouteRepositoryConnected(uow);
+
+                var checkBeforeCreate = repos.GetById(1000000);
+
+                var checkBeforeUpdate = repos.GetById(2);
+
+                var checkBeforeDelete = repos.GetById(3);
+
+                var routeCreate = new RouteOfCargo() { Id = 86731, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
+
+                repos.Create(routeCreate);
+
+                var routeUpdate = new RouteOfCargo() { Id = 2, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 1 };
+
+                repos.Update(routeUpdate);
+
+                repos.Delete(3);
+
+                var checkAfterUpdate = repos.GetById(86731);
+
+                var checkAfterCreate = repos.GetById(2);
+
+                var checkAfterDelete = repos.GetById(3);
+
+                uow.Rollback();
+
+                var checkCreateAfterRollback = repos.GetById(86731);
+
+                var checkUpdateAfterRollback = repos.GetById(2);
+
+                var checkDeleteAfterRollback = repos.GetById(3);
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //var uow = new UnitOfWork();
             //var w = new Warehouse() { Id = 297, City = "Sity", State = "State" };
             //uow.WarehouseRepositoryConnected.Create(w, true, System.Data.IsolationLevel.ReadCommitted);
             //var w1 = new Warehouse() { Id = 297, City = "Sity1", State = "State1" };
             //uow.WarehouseRepositoryConnected.Update(w1, true, System.Data.IsolationLevel.ReadCommitted);
-            uow.WarehouseRepositoryConnected.Delete(290, true, System.Data.IsolationLevel.ReadCommitted);
+            //uow.WarehouseRepositoryConnected.Delete(290, true, System.Data.IsolationLevel.ReadCommitted);
             //var list = uow.WarehouseRepositoryConnected.GetAll().ToList();
             //foreach (var item in list)
             //{
@@ -54,8 +140,8 @@ namespace CDP.AdoNet
 
 
 
-            var adapter = new SqlDataAdapter();
-            var dataSet = uow.RouteRepositoryDisconnected.GetAll(adapter);
+            //var adapter = new SqlDataAdapter();
+            //var dataSet = uow.RouteRepositoryDisconnected.GetAll(adapter);
             //var r1 = new RouteOfCargo() { Id = 100000, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
             //var r2 = new RouteOfCargo() { Id = 6, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
             //var created = uow.RouteRepositoryDisconnected.Create(dataSet, adapter, r1);
@@ -63,16 +149,16 @@ namespace CDP.AdoNet
             //var deleted = uow.RouteRepositoryDisconnected.Delete(dataSet, adapter, 5);
             //uow.RouteRepositoryDisconnected.Save(adapter, dataSet);
 
-            var adapter1 = new SqlDataAdapter();
-            var dataSet1 = uow.WarehouseRepositoryDisconnected.GetAll(adapter1);
-            var w = new Warehouse() { Id = 300, City = "Sity299", State = "State" };
-            var w1 = new Warehouse() { Id = 291, City = "Sity", State = "State" };
-            var created1 = uow.WarehouseRepositoryDisconnected.Create(dataSet1, adapter1, w);
-            var updated1 = uow.WarehouseRepositoryDisconnected.Update(dataSet1, adapter1, w1);
-            var deleted = uow.RouteRepositoryDisconnected.DeleteByWarehouseId(dataSet, adapter, 293);
-            uow.RouteRepositoryDisconnected.Save(adapter, dataSet);
-            var deleted1 = uow.WarehouseRepositoryDisconnected.Delete(dataSet1, adapter1, 293);
-            uow.WarehouseRepositoryDisconnected.Save(adapter1, dataSet1);
+            //var adapter1 = new SqlDataAdapter();
+            //var dataSet1 = uow.WarehouseRepositoryDisconnected.GetAll(adapter1);
+            //var w = new Warehouse() { Id = 300, City = "Sity299", State = "State" };
+            //var w1 = new Warehouse() { Id = 291, City = "Sity", State = "State" };
+            //var created1 = uow.WarehouseRepositoryDisconnected.Create(dataSet1, adapter1, w);
+            //var updated1 = uow.WarehouseRepositoryDisconnected.Update(dataSet1, adapter1, w1);
+            //var deleted = uow.RouteRepositoryDisconnected.DeleteByWarehouseId(dataSet, adapter, 293);
+            //uow.RouteRepositoryDisconnected.Save(adapter, dataSet);
+            //var deleted1 = uow.WarehouseRepositoryDisconnected.Delete(dataSet1, adapter1, 293);
+            //uow.WarehouseRepositoryDisconnected.Save(adapter1, dataSet1);
 
             //uow.RouteRepositoryDisconnected.Delete(1, true, System.Data.IsolationLevel.ReadCommitted);
 

@@ -1,15 +1,14 @@
-﻿using CDP.AdoNet.Interfaces;
-using CDP.AdoNet.Models;
+﻿using CDP.AdoNet.Models;
 
 namespace CDP.AdoNet.Interfaces
 {
     public interface IUnitOfWork
     {
-        IRepository<Warehouse> WarehouseRepositoryConnected { get;}
+        //IRepository<Warehouse> WarehouseRepositoryConnected { get;}
 
         IRepositoryDisconnected<Warehouse> WarehouseRepositoryDisconnected { get; }
 
-        IRepository<RouteOfCargo> RouteRepositoryConnected { get; }
+        //IRepository<RouteOfCargo> RouteRepositoryConnected { get; }
 
         IRouteRepositoryDisconnected RouteRepositoryDisconnected { get; }
     }
