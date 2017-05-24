@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace CDP.AdoNet.Repositories
 {
-    public class WarehouseRepositoryDisconnected : IWarehouseRepositoryConnected
+    public class WarehouseRepositoryDisconnected : IRepositoryDisconnected<Warehouse>
     {
         private readonly SqlConnection _connection;
 
@@ -16,7 +16,7 @@ namespace CDP.AdoNet.Repositories
             _connection = connectionString;
         }
 
-        public void Create(Warehouse obj, bool isCommitted, IsolationLevel level)
+        public DataSet Create(DataSet dataSet, SqlDataAdapter adapter, Warehouse obj)
         {
             //var adapter = new SqlDataAdapter();
             //const string query = "INSERT dbo.Warehouse (Id, City, State) VALUES(@Id, @City, @State)";
@@ -37,125 +37,59 @@ namespace CDP.AdoNet.Repositories
             //        Console.WriteLine("An exception: " + ex.Message + " was encountered while operation.");
             //    }
             //}
-            const string query = "SELECT Id, City, State FROM dbo.Warehouse";
-
-            using (var command = new SqlCommand(query, _connection))
-            {
-                _connection.Open();
-                var adapter = new SqlDataAdapter();
-                adapter.TableMappings.Add("Table", "Items");
-                adapter.SelectCommand = command;
-                var dataSet = new DataSet("Itms");
-                adapter.Fill(dataSet);
-                _connection.Close();
-                DataRow anyRow = dataSet.Tables["Items"].NewRow();
+           
+                DataRow anyRow = dataSet.Tables["Warehouse"].NewRow();
                 anyRow["Id"] = obj.Id;
                 anyRow["City"] = obj.City;
                 anyRow["State"] = obj.State;
-                dataSet.Tables["Items"].Rows.Add(anyRow);
+                dataSet.Tables["Warehouse"].Rows.Add(anyRow);
                 var commandBuilder = new SqlCommandBuilder(adapter);
                 adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-                _connection.Open();
-                adapter.Update(dataSet);
-                _connection.Close();
-            }
+                return dataSet;
+            
         }
 
-        public IEnumerable<Warehouse> GetAll()
-        {
-            var warehouseList = new List<Warehouse>();
+        public DataSet GetAll(SqlDataAdapter adapter)
+        {          
             const string query = "SELECT Id, City, State FROM dbo.Warehouse";
 
             using (var command = new SqlCommand(query, _connection))
             {
                 _connection.Open();
-                var adapter = new SqlDataAdapter();
-                adapter.TableMappings.Add("Table", "Items");
+                adapter.TableMappings.Add("Table", "Warehouse");
                 adapter.SelectCommand = command;
-                var dataSet = new DataSet("Itms");
+                var dataSet = new DataSet("Warehouse");
                 adapter.Fill(dataSet);
                 _connection.Close();
-                foreach (DataRow row in dataSet.Tables["Items"].Rows)
-                {
-                    warehouseList.Add(
-                        new Warehouse
-                        {
-                            Id = Convert.ToInt32(row["Id"]),
-                            City = Convert.ToString(row["City"]),
-                            State = Convert.ToString(row["State"])
-                        }
-                    );
-                }
-                return warehouseList;
+                return dataSet;
             }
         }
 
-        public void Update(Warehouse obj, bool isCommitted, IsolationLevel level)
-        {
-            const string query = "SELECT Id, City, State FROM dbo.Warehouse";
-
-            using (var command = new SqlCommand(query, _connection))
-            {
-                _connection.Open();
-                var adapter = new SqlDataAdapter();
-                adapter.TableMappings.Add("Table", "Items");
-                adapter.SelectCommand = command;
-                var dataSet = new DataSet("Itms");
-                adapter.Fill(dataSet);
-                _connection.Close();
+        public DataSet Update(DataSet dataSet, SqlDataAdapter adapter, Warehouse obj)
+        { 
                 var row =
-                    dataSet.Tables["Items"].Select($"Id = '{obj.Id}'");
+                    dataSet.Tables["Warehouse"].Select($"Id = '{obj.Id}'");
                 row[0]["City"] = obj.City;
                 row[0]["State"] = obj.State;
                 var commandBuilder = new SqlCommandBuilder(adapter);
                 adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-                _connection.Open();
-                adapter.Update(dataSet);
-                _connection.Close();
-            }
+                return dataSet;           
         }
 
-        public void Delete(int id, bool isCommitted, IsolationLevel level)
+        public void Save(SqlDataAdapter adapter, DataSet dataSet)
         {
-            const string query = "SELECT Id, City, State FROM dbo.Warehouse";
-
-            using (var command = new SqlCommand(query, _connection))
-            {
-                _connection.Open();
-                var adapter = new SqlDataAdapter();
-                adapter.TableMappings.Add("Table", "Items");
-                adapter.SelectCommand = command;
-                var dataSet = new DataSet("Itms");
-                adapter.Fill(dataSet);
-                _connection.Close();
+            _connection.Open();
+            adapter.Update(dataSet);
+            _connection.Close();
+        }
+        public DataSet Delete(DataSet dataSet, SqlDataAdapter adapter, int id)
+        {            
                 var row =
-                   dataSet.Tables["Items"].Select($"Id = '{id}'");
+                   dataSet.Tables["Warehouse"].Select($"Id = '{id}'");
                 row[0].Delete();
                 var commandBuilder = new SqlCommandBuilder(adapter);
                 adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-                _connection.Open();
-                adapter.Update(dataSet);
-                _connection.Close();
-            }
-            //var adapter = new SqlDataAdapter();
-            //const string query =
-            //    "DELETE FROM dbo.RouteOfCargo WHERE OriginWarehouseId = @Id OR DestinationWarehouseId = @Id;"+
-            //    "DELETE FROM dbo.Warehouse WHERE Id = @Id; ";
-            //using (var command = new SqlCommand(query, _connection))
-            //{
-            //    try
-            //    {
-            //        _connection.Open();
-            //        command.Parameters.AddWithValue("@Id", id);
-            //        adapter.DeleteCommand = command;
-            //        adapter.DeleteCommand.ExecuteNonQuery();
-            //        _connection.Close();
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine("An exception: " + ex.Message + " was encountered while operation.");
-            //    }
-            //}
-        }
+            return dataSet;
+         }
     }
 }

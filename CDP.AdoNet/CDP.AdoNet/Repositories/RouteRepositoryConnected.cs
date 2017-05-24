@@ -7,7 +7,7 @@ using System.Data.SqlClient;
 
 namespace CDP.AdoNet.Repositories
 {
-    public class RouteRepositoryConnected : IRouteRepositoryConnected
+    public class RouteRepositoryConnected : IRepository<RouteOfCargo>
     {
         private readonly SqlConnection _connection;
 

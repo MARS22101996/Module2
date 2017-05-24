@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Configuration;
 using System;
+using CDP.AdoNet.Models;
 
 namespace CDP.AdoNet.Repositories
 {
@@ -9,27 +10,26 @@ namespace CDP.AdoNet.Repositories
     {
         private readonly SqlConnection _connectionString;
 
-        private IWarehouseRepositoryConnected _warehouseRepositoryConnected;
+        private IRepository<Warehouse>  _warehouseRepositoryConnected;
 
-        private IWarehouseRepositoryConnected _warehouseRepositoryDisconnected;
+        private IRepositoryDisconnected<Warehouse> _warehouseRepositoryDisconnected;
 
-        private IRouteRepositoryConnected _routeRepositoryConnected;
+        private IRepository<RouteOfCargo> _routeRepositoryConnected;
 
-        private IRouteRepositoryConnected _routeRepositoryDisconnected;
+        private IRepositoryDisconnected<RouteOfCargo> _routeRepositoryDisconnected;
 
-        public IWarehouseRepositoryConnected WarehouseRepositoryConnected => _warehouseRepositoryConnected ?? (_warehouseRepositoryConnected = new WarehouseRepositoryConnected(_connectionString));
+        public IRepository<Warehouse> WarehouseRepositoryConnected => _warehouseRepositoryConnected ?? (_warehouseRepositoryConnected = new WarehouseRepositoryConnected(_connectionString));
 
-        public IWarehouseRepositoryConnected WarehouseRepositoryDisconnected => _warehouseRepositoryDisconnected ?? (_warehouseRepositoryDisconnected = new WarehouseRepositoryDisconnected(_connectionString));
+        public IRepositoryDisconnected<Warehouse> WarehouseRepositoryDisconnected => _warehouseRepositoryDisconnected ?? (_warehouseRepositoryDisconnected = new WarehouseRepositoryDisconnected(_connectionString));
 
-        public IRouteRepositoryConnected RouteRepositoryConnected => _routeRepositoryConnected ?? (_routeRepositoryConnected = new RouteRepositoryConnected(_connectionString));
+        public IRepository<RouteOfCargo> RouteRepositoryConnected => _routeRepositoryConnected ?? (_routeRepositoryConnected = new RouteRepositoryConnected(_connectionString));
 
-        public IRouteRepositoryConnected RouteRepositoryDisconnected => _routeRepositoryConnected ?? (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connectionString));
+        public IRepositoryDisconnected<RouteOfCargo> RouteRepositoryDisconnected => _routeRepositoryDisconnected ?? (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connectionString));
 
         public UnitOfWork()
         {
             string conString = ConfigurationManager.ConnectionStrings["CDPDatabase"].ToString();
-            _connectionString = new SqlConnection(conString);
-            //_connectionString = "Server=.\\SQLExpress;Database=mariia_suvalova_cdp2017q1;Integrated Security=SSPI;";
+            _connectionString = new SqlConnection(conString);           
         }
 
         private bool _disposed = false;

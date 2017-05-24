@@ -8,7 +8,7 @@ using System.Data.SqlClient;
 
 namespace CDP.AdoNet.Repositories
 {
-    public class WarehouseRepositoryConnected : IWarehouseRepositoryConnected
+    public class WarehouseRepositoryConnected : IRepository<Warehouse>
     {
         private readonly SqlConnection _connection;
 
