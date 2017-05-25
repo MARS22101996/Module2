@@ -1,5 +1,6 @@
 ﻿using CDP.AdoNet.Interfaces;
 using CDP.AdoNet.Models;
+using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -9,6 +10,7 @@ namespace CDP.AdoNet.Repositories
     {
         private readonly SqlConnection _connection;
 
+        private SqlTransaction _transaction;
         public WarehouseRepositoryDisconnected(SqlConnection connectionString)
         {
             _connection = connectionString;
@@ -53,10 +55,30 @@ namespace CDP.AdoNet.Repositories
             return dataSet;
         }
 
-        public void Save(SqlDataAdapter adapter, DataSet dataSet)
+        public void ApplyChanges(SqlDataAdapter adapter, DataSet dataSet)
         {
             _connection.Open();
+            _transaction = _connection.BeginTransaction(IsolationLevel.ReadUncommitted);
+            adapter.UpdateCommand.Transaction = _transaction;
+            adapter.SelectCommand.Transaction = _transaction;
             adapter.Update(dataSet);
+        }
+
+        public void Commit()
+        {
+            if (_transaction == null)
+                throw new InvalidOperationException("Transaction have already been commited. Check your transaction handling.");
+            _transaction.Commit();
+            _transaction = null;
+            _connection.Close();
+        }
+
+        public void Rollback()
+        {
+            if (_transaction == null)
+                throw new InvalidOperationException("Transaction have already been rollbacked. Check your transaction handling.");
+            _transaction.Rollback();
+            _transaction = null;
             _connection.Close();
         }
 

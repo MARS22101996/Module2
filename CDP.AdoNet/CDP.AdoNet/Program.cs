@@ -1,4 +1,5 @@
-﻿using CDP.AdoNet.Models;
+﻿using System.Data.SqlClient;
+using CDP.AdoNet.Models;
 using CDP.AdoNet.Repositories;
 using CDP.AdoNet.UnitOfWorks;
 
@@ -43,49 +44,100 @@ namespace CDP.AdoNet
             //    var checkDeleteAfterRollback = repos.GetById(289);
 
             //}
+            
+            //using (var uow = UnitOfWorkFactory.Create())
+            //{
+            //    var repos = new RouteRepositoryConnected(uow);
 
+            //    var checkBeforeCreate = repos.GetById(86732);
+
+            //    var checkBeforeUpdate = repos.GetById(2);
+
+            //    var checkBeforeDelete = repos.GetById(3);
+
+            //    var routeCreate = new RouteOfCargo() { Id = 86732, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
+
+            //    repos.Create(routeCreate);
+
+            //    var routeUpdate = new RouteOfCargo() { Id = 2, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 1 };
+
+            //    repos.Update(routeUpdate);
+
+            //    repos.Delete(3);
+
+            //    var checkAfterUpdate = repos.GetById(86732);
+
+            //    var checkAfterCreate = repos.GetById(2);
+
+            //    var checkAfterDelete = repos.GetById(3);
+
+            //    uow.Rollback();
+
+            //    var checkCreateAfterRollback = repos.GetById(86732);
+
+            //    var checkUpdateAfterRollback = repos.GetById(2);
+
+            //    var checkDeleteAfterRollback = repos.GetById(3);
+
+            //}
+
+            var uoW = new UnitOfWork();
+            var adapter = new SqlDataAdapter();
+            var dataSet = uoW.RouteRepositoryDisconnected.GetAll(adapter);
+            var adapter1 = new SqlDataAdapter();
+            var dataSet1 = uoW.WarehouseRepositoryDisconnected.GetAll(adapter1);
             using (var uow = UnitOfWorkFactory.Create())
             {
-                var repos = new RouteRepositoryConnected(uow);
+                var repos = new WarehouseRepositoryConnected(uow);
 
-                var checkBeforeCreate = repos.GetById(1000000);
+                var checkBeforeCreateDisconnected = repos.GetById(308);
 
-                var checkBeforeUpdate = repos.GetById(2);
+                var checkBeforeUpdateDisconnected = repos.GetById(304);
 
-                var checkBeforeDelete = repos.GetById(3);
-
-                var routeCreate = new RouteOfCargo() { Id = 86731, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
-
-                repos.Create(routeCreate);
-
-                var routeUpdate = new RouteOfCargo() { Id = 2, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 1 };
-
-                repos.Update(routeUpdate);
-
-                repos.Delete(3);
-
-                var checkAfterUpdate = repos.GetById(86731);
-
-                var checkAfterCreate = repos.GetById(2);
-
-                var checkAfterDelete = repos.GetById(3);
-
-                uow.Rollback();
-
-                var checkCreateAfterRollback = repos.GetById(86731);
-
-                var checkUpdateAfterRollback = repos.GetById(2);
-
-                var checkDeleteAfterRollback = repos.GetById(3);
-
+                //var checkBeforeDeleteDisconnected = repos.GetById(289);
             }
 
+            var wCreate = new Warehouse() { Id = 308, City = "Sity308", State = "State308" };
 
+            var created = uoW.WarehouseRepositoryDisconnected.Create(dataSet1, adapter1, wCreate);
 
+            var wUpdate = new Warehouse() { Id = 304, City = "SityUpdate", State = "StateUpdate" };
 
+            var updated = uoW.WarehouseRepositoryDisconnected.Update(dataSet1, adapter1, wUpdate);
 
+            //var deleted = uoW.RouteRepositoryDisconnected.DeleteByWarehouseId(dataSet, adapter, 289);
 
+            //uoW.RouteRepositoryDisconnected.ApplyChanges(adapter, dataSet);
 
+            //var deleted1 = uoW.WarehouseRepositoryDisconnected.Delete(dataSet1, adapter1, 289);
+
+            uoW.WarehouseRepositoryDisconnected.ApplyChanges(adapter1, dataSet1);
+
+            using (var uow1 = UnitOfWorkFactory.Create())
+            {
+                var repos = new WarehouseRepositoryConnected(uow1);
+
+                var checkAfterCreateDisconnected = repos.GetById(308);
+
+                var checkAfterUpdateDisconnected = repos.GetById(304);
+
+                //var checkAfterDeleteDisconnected = repos.GetById(289);
+            }
+
+            uoW.WarehouseRepositoryDisconnected.Rollback();
+
+            //uoW.RouteRepositoryDisconnected.Rollback();
+
+            using (var uow2 = UnitOfWorkFactory.Create())
+            {
+                var repos = new WarehouseRepositoryConnected(uow2);
+
+                var checkCreateAfterRollbackDisconnected = repos.GetById(308);
+
+                var checkUpdateAfterRollbackDisconnected = repos.GetById(304);
+
+                //var checkDeleteAfterRollbackDisconnected = repos.GetById(3);
+            }
 
 
 

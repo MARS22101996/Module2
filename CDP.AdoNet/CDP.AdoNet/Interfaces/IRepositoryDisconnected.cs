@@ -9,6 +9,8 @@ namespace CDP.AdoNet.Interfaces
         DataSet Update(DataSet data, SqlDataAdapter adapter, T obj);
         DataSet Delete(DataSet data, SqlDataAdapter adapter, int id);
         DataSet GetAll(SqlDataAdapter adapter);
-        void Save(SqlDataAdapter adapter, DataSet dataSet);
+        void ApplyChanges(SqlDataAdapter adapter, DataSet dataSet);
+        void Commit();
+        void Rollback();
     }
 }

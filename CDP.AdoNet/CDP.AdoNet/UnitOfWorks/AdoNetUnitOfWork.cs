@@ -16,7 +16,7 @@ namespace CDP.AdoNet.UnitOfWorks
         {
             _connection = connection;
             _ownsConnection = ownsConnection;
-            _transaction = connection.BeginTransaction();
+            _transaction = connection.BeginTransaction(IsolationLevel.ReadUncommitted);
         }
 
         public IDbCommand CreateCommand()
@@ -37,7 +37,7 @@ namespace CDP.AdoNet.UnitOfWorks
         public void Rollback()
         {
             if (_transaction == null)
-                throw new InvalidOperationException("Transaction have already been commited. Check your transaction handling.");
+                throw new InvalidOperationException("Transaction have already been rallbacked. Check your transaction handling.");
             _transaction.Rollback();
             _transaction = null;
         }

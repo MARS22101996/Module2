@@ -9,28 +9,26 @@ namespace CDP.AdoNet.UnitOfWorks
 {
     public class UnitOfWork : IUnitOfWork, IDisposable
     {
-        private readonly SqlConnection _connectionString;
-
-        //private IRepository<Warehouse> _warehouseRepositoryConnected;
+        private readonly SqlConnection _connection;
 
         private IRepositoryDisconnected<Warehouse> _warehouseRepositoryDisconnected;
 
-        //private IRepository<RouteOfCargo> _routeRepositoryConnected;
-
         private IRouteRepositoryDisconnected _routeRepositoryDisconnected;
 
-        //public IRepository<Warehouse> WarehouseRepositoryConnected => _warehouseRepositoryConnected ?? (_warehouseRepositoryConnected = new WarehouseRepositoryConnected(_connectionString));
+        public IRepositoryDisconnected<Warehouse> WarehouseRepositoryDisconnected
+            =>
+                _warehouseRepositoryDisconnected ??
+                (_warehouseRepositoryDisconnected = new WarehouseRepositoryDisconnected(_connection));
 
-        public IRepositoryDisconnected<Warehouse> WarehouseRepositoryDisconnected => _warehouseRepositoryDisconnected ?? (_warehouseRepositoryDisconnected = new WarehouseRepositoryDisconnected(_connectionString));
-
-        //public IRepository<RouteOfCargo> RouteRepositoryConnected => _routeRepositoryConnected ?? (_routeRepositoryConnected = new RouteRepositoryConnected(_connectionString));
-
-        public IRouteRepositoryDisconnected RouteRepositoryDisconnected => _routeRepositoryDisconnected ?? (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connectionString));
+        public IRouteRepositoryDisconnected RouteRepositoryDisconnected
+            =>
+                _routeRepositoryDisconnected ??
+                (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connection));
 
         public UnitOfWork()
         {
             string conString = ConfigurationManager.ConnectionStrings["CDPDatabase"].ToString();
-            _connectionString = new SqlConnection(conString);
+            _connection = new SqlConnection(conString);
         }
 
         private bool _disposed;
@@ -41,7 +39,7 @@ namespace CDP.AdoNet.UnitOfWorks
             {
                 if (disposing)
                 {
-                    _connectionString.Dispose();
+                    _connection.Dispose();
                 }
                 _disposed = true;
             }
