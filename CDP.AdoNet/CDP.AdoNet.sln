@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP.AdoNet", "CDP.AdoNet\CDP.AdoNet.csproj", "{6D46C4F5-882F-4960-9300-131171862FAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDP.AdoNet.Tests", "CDP.AdoNet.Tests\CDP.AdoNet.Tests.csproj", "{D1834A7E-54E2-4C1E-AFA3-E7915F5D688A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6D46C4F5-882F-4960-9300-131171862FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D46C4F5-882F-4960-9300-131171862FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D46C4F5-882F-4960-9300-131171862FAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1834A7E-54E2-4C1E-AFA3-E7915F5D688A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1834A7E-54E2-4C1E-AFA3-E7915F5D688A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1834A7E-54E2-4C1E-AFA3-E7915F5D688A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1834A7E-54E2-4C1E-AFA3-E7915F5D688A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

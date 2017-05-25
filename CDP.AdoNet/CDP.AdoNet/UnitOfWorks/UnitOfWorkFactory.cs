@@ -5,7 +5,7 @@ namespace CDP.AdoNet.UnitOfWorks
 {
     public class UnitOfWorkFactory
     {
-        public static Interfaces.IUnitOfWorkConnected Create()
+        public static UnitOfWorkConnected Create()
         {
             var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CDPDatabase"].ToString());
 
