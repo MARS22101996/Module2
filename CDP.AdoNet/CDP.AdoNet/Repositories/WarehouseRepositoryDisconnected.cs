@@ -1,6 +1,5 @@
 ﻿using CDP.AdoNet.Interfaces;
 using CDP.AdoNet.Models;
-using System;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -10,22 +9,20 @@ namespace CDP.AdoNet.Repositories
     {
         private readonly SqlConnection _connection;
 
-        private SqlTransaction _transaction;
         public WarehouseRepositoryDisconnected(SqlConnection connectionString)
         {
             _connection = connectionString;
         }
 
-        public DataSet Create(DataSet dataSet, SqlDataAdapter adapter, Warehouse obj)
+        public void Create(DataSet dataSet, SqlDataAdapter adapter, Warehouse obj)
         {
-            DataRow anyRow = dataSet.Tables["Warehouse"].NewRow();
+            var anyRow = dataSet.Tables["Warehouse"].NewRow();
             anyRow["Id"] = obj.Id;
             anyRow["City"] = obj.City;
             anyRow["State"] = obj.State;
             dataSet.Tables["Warehouse"].Rows.Add(anyRow);
             var commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-            return dataSet;
         }
 
         public DataSet GetAll(SqlDataAdapter adapter)
@@ -44,7 +41,7 @@ namespace CDP.AdoNet.Repositories
             }
         }
 
-        public DataSet Update(DataSet dataSet, SqlDataAdapter adapter, Warehouse obj)
+        public void Update(DataSet dataSet, SqlDataAdapter adapter, Warehouse obj)
         {
             var row =
                 dataSet.Tables["Warehouse"].Select($"Id = '{obj.Id}'");
@@ -52,44 +49,22 @@ namespace CDP.AdoNet.Repositories
             row[0]["State"] = obj.State;
             var commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-            return dataSet;
         }
 
-        public void ApplyChanges(SqlDataAdapter adapter, DataSet dataSet)
+        public void ApplyChanges(SqlDataAdapter adapter, DataSet dataSet, SqlTransaction transaction)
         {
-            _connection.Open();
-            _transaction = _connection.BeginTransaction(IsolationLevel.ReadUncommitted);
-            adapter.UpdateCommand.Transaction = _transaction;
-            adapter.SelectCommand.Transaction = _transaction;
-            adapter.Update(dataSet);
+                adapter.UpdateCommand.Transaction = transaction;
+                adapter.SelectCommand.Transaction = transaction;
+                adapter.Update(dataSet);
         }
 
-        public void Commit()
-        {
-            if (_transaction == null)
-                throw new InvalidOperationException("Transaction have already been commited. Check your transaction handling.");
-            _transaction.Commit();
-            _transaction = null;
-            _connection.Close();
-        }
-
-        public void Rollback()
-        {
-            if (_transaction == null)
-                throw new InvalidOperationException("Transaction have already been rollbacked. Check your transaction handling.");
-            _transaction.Rollback();
-            _transaction = null;
-            _connection.Close();
-        }
-
-        public DataSet Delete(DataSet dataSet, SqlDataAdapter adapter, int id)
+        public void Delete(DataSet dataSet, SqlDataAdapter adapter, int id)
         {
             var row =
                 dataSet.Tables["Warehouse"].Select($"Id = '{id}'");
             row[0].Delete();
             var commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-            return dataSet;
         }
     }
 }

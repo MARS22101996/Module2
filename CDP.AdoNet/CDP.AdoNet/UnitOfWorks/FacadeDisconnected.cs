@@ -4,10 +4,11 @@ using System.Data.SqlClient;
 using CDP.AdoNet.Interfaces;
 using CDP.AdoNet.Models;
 using CDP.AdoNet.Repositories;
+using static System.GC;
 
 namespace CDP.AdoNet.UnitOfWorks
 {
-    public class UnitOfWork : IUnitOfWork, IDisposable
+    public sealed class FacadeDisconnected : IFacadeDisconnected, IDisposable
     {
         private readonly SqlConnection _connection;
 
@@ -25,15 +26,21 @@ namespace CDP.AdoNet.UnitOfWorks
                 _routeRepositoryDisconnected ??
                 (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connection));
 
-        public UnitOfWork()
+
+        public SqlConnection Connection()
+        {
+            return _connection;
+        }
+
+        public FacadeDisconnected()
         {
             string conString = ConfigurationManager.ConnectionStrings["CDPDatabase"].ToString();
-            _connection = new SqlConnection(conString);
+            _connection = new SqlConnection(conString); 
         }
 
         private bool _disposed;
 
-        public virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (!_disposed)
             {
@@ -48,7 +55,7 @@ namespace CDP.AdoNet.UnitOfWorks
         public void Dispose()
         {
             Dispose(true);
-            GC.SuppressFinalize(this);
+            SuppressFinalize(this);
         }
     }
 }

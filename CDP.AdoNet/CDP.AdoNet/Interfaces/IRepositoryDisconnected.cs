@@ -5,12 +5,10 @@ namespace CDP.AdoNet.Interfaces
 {
     public interface IRepositoryDisconnected<T>
     {
-        DataSet Create(DataSet data, SqlDataAdapter adapter, T obj);
-        DataSet Update(DataSet data, SqlDataAdapter adapter, T obj);
-        DataSet Delete(DataSet data, SqlDataAdapter adapter, int id);
+        void Create(DataSet data, SqlDataAdapter adapter, T obj);
+        void Update(DataSet data, SqlDataAdapter adapter, T obj);
+        void Delete(DataSet data, SqlDataAdapter adapter, int id);
         DataSet GetAll(SqlDataAdapter adapter);
-        void ApplyChanges(SqlDataAdapter adapter, DataSet dataSet);
-        void Commit();
-        void Rollback();
+        void  ApplyChanges(SqlDataAdapter adapter, DataSet dataSet, SqlTransaction transaction);
     }
 }

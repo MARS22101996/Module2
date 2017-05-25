@@ -1,4 +1,7 @@
-﻿using System.Data.SqlClient;
+﻿using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
 using CDP.AdoNet.Models;
 using CDP.AdoNet.Repositories;
 using CDP.AdoNet.UnitOfWorks;
@@ -9,6 +12,8 @@ namespace CDP.AdoNet
     {
         static void Main(string[] args)
         {
+
+            //Connected Warehouse
             //using (var uow = UnitOfWorkFactory.Create())
             //{
             //    var repos = new WarehouseRepositoryConnected(uow);
@@ -44,7 +49,9 @@ namespace CDP.AdoNet
             //    var checkDeleteAfterRollback = repos.GetById(289);
 
             //}
-            
+
+
+            //Connected Route
             //using (var uow = UnitOfWorkFactory.Create())
             //{
             //    var repos = new RouteRepositoryConnected(uow);
@@ -55,19 +62,19 @@ namespace CDP.AdoNet
 
             //    var checkBeforeDelete = repos.GetById(3);
 
-            //    var routeCreate = new RouteOfCargo() { Id = 86732, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
+            //    var routeCreateConnected = new RouteOfCargo() { Id = 86732, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
 
-            //    repos.Create(routeCreate);
+            //    repos.Create(routeCreateConnected);
 
-            //    var routeUpdate = new RouteOfCargo() { Id = 2, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 1 };
+            //    var routeUpdateConnected = new RouteOfCargo() { Id = 2, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 1 };
 
-            //    repos.Update(routeUpdate);
+            //    repos.Update(routeUpdateConnected);
 
             //    repos.Delete(3);
 
-            //    var checkAfterUpdate = repos.GetById(86732);
+            //    var checkAfterCreate = repos.GetById(86732);
 
-            //    var checkAfterCreate = repos.GetById(2);
+            //    var checkAfterUpdate = repos.GetById(2);
 
             //    var checkAfterDelete = repos.GetById(3);
 
@@ -81,155 +88,227 @@ namespace CDP.AdoNet
 
             //}
 
-            var uoW = new UnitOfWork();
-            var adapter = new SqlDataAdapter();
-            var dataSet = uoW.RouteRepositoryDisconnected.GetAll(adapter);
-            var adapter1 = new SqlDataAdapter();
-            var dataSet1 = uoW.WarehouseRepositoryDisconnected.GetAll(adapter1);
+
+            //Disconnected Warehouse
+            //var uoW = new UnitOfWork();
+            //var adapter = new SqlDataAdapter();
+            //var dataSet = uoW.RouteRepositoryDisconnected.GetAll(adapter);
+            //var adapter1 = new SqlDataAdapter();
+            //var dataSet1 = uoW.WarehouseRepositoryDisconnected.GetAll(adapter1);
+            //using (var uow = UnitOfWorkFactory.Create())
+            //{
+            //    var repos = new WarehouseRepositoryConnected(uow);
+
+            //    var checkBeforeCreateDisconnected = repos.GetById(308);
+
+            //    var checkBeforeUpdateDisconnected = repos.GetById(304);
+
+            //    var checkBeforeDeleteDisconnected = repos.GetById(289);
+            //}
+
+            //var wCreate = new Warehouse() { Id = 308, City = "Sity308", State = "State308" };
+
+            //var created = uoW.WarehouseRepositoryDisconnected.Create(dataSet1, adapter1, wCreate);
+
+            //var wUpdate = new Warehouse() { Id = 304, City = "SityUpdate", State = "StateUpdate" };
+
+            //var updated = uoW.WarehouseRepositoryDisconnected.Update(dataSet1, adapter1, wUpdate);
+
+            //var deleted = uoW.RouteRepositoryDisconnected.DeleteByWarehouseId(dataSet, adapter, 289);
+
+            //uoW.RouteRepositoryDisconnected.ApplyChanges(adapter, dataSet, false);
+
+            //var deleted1 = uoW.WarehouseRepositoryDisconnected.Delete(dataSet1, adapter1, 289);
+
+            //uoW.WarehouseRepositoryDisconnected.ApplyChanges(adapter1, dataSet1, true);
+
+            //using (var uow1 = UnitOfWorkFactory.Create())
+            //{
+            //    var repos = new WarehouseRepositoryConnected(uow1);
+
+            //    var checkAfterCreateDisconnected = repos.GetById(308);
+
+            //    var checkAfterUpdateDisconnected = repos.GetById(304);
+
+            //    var checkAfterDeleteDisconnected = repos.GetById(289);
+            //}
+
+            //uoW.WarehouseRepositoryDisconnected.Rollback();
+
+            //using (var uow2 = UnitOfWorkFactory.Create())
+            //{
+            //    var repos = new WarehouseRepositoryConnected(uow2);
+
+            //    var checkCreateAfterRollbackDisconnected = repos.GetById(308);
+
+            //    var checkUpdateAfterRollbackDisconnected = repos.GetById(304);
+
+            //    var checkDeleteAfterRollbackDisconnected = repos.GetById(289);
+            //}
+
+            //Disconnected Route
+
+            //int maxId;
+
+            //int id;
+
+            //using (var uow = UnitOfWorkFactory.Create())
+            //{
+            //    var repos = new RouteRepositoryConnected(uow);
+
+            //    maxId = repos.GetAll().ToList().FindLast(x => x.Id != 1).Id;
+
+            //    id = maxId + 1;
+
+            //    var checkBeforeCreate = repos.GetById(maxId + 1);
+
+            //    var checkBeforeUpdate = repos.GetById(2);
+
+            //    var checkBeforeDelete = repos.GetById(3);
+            //}
+
+            //var routeCreate = new RouteOfCargo()
+            //{
+            //    Id = id,
+            //    OriginWarehouseId = 1,
+            //    DestinationWarehouseId = 1,
+            //    Distance = 100
+            //};
+
+            //var createdRoute = uoW.RouteRepositoryDisconnected.Create(dataSet, adapter, routeCreate);
+
+            //var routeUpdate = new RouteOfCargo()
+            //{
+            //    Id = 2,
+            //    OriginWarehouseId = 111,
+            //    DestinationWarehouseId = 111,
+            //    Distance = 111
+            //};
+
+            //var updatedRoute = uoW.RouteRepositoryDisconnected.Update(dataSet, adapter, routeUpdate);
+
+            //var deletedRoute = uoW.RouteRepositoryDisconnected.Delete(dataSet, adapter, 4);
+
+            //uoW.RouteRepositoryDisconnected.ApplyChanges(adapter, dataSet, true);
+
+            //using (var uow = UnitOfWorkFactory.Create())
+            //{
+            //    var repos = new RouteRepositoryConnected(uow);
+
+            //    var checkAfterUpdate = repos.GetById(id, null);
+
+            //    var checkAfterCreate = repos.GetById(2, null);
+
+            //    var checkAfterDelete = repos.GetById(4, null);
+            //}
+
+            //uoW.RouteRepositoryDisconnected.Rollback();
+
+            //using (var uow = UnitOfWorkFactory.Create())
+            //{
+            //    var repos = new RouteRepositoryConnected(uow);
+
+            //    var checkCreateAfterRollback = repos.GetById(id, null);
+
+            //    var checkUpdateAfterRollback = repos.GetById(2, null);
+
+            //    var checkDeleteAfterRollback = repos.GetById(4, null);
+            //}
+
+
+            var uoW = new FacadeDisconnected();
+
+            var adapterWarehouse = new SqlDataAdapter();
+
+            var dataSetWarehouse = uoW.WarehouseRepositoryDisconnected.GetAll(adapterWarehouse);
+
+            var adapterRoute = new SqlDataAdapter();
+
+            var dataSetRoute = uoW.RouteRepositoryDisconnected.GetAll(adapterRoute);
+
             using (var uow = UnitOfWorkFactory.Create())
             {
                 var repos = new WarehouseRepositoryConnected(uow);
 
-                var checkBeforeCreateDisconnected = repos.GetById(308);
+                var checkBeforeCreationOfFirst = repos.GetById(308, null);
 
-                var checkBeforeUpdateDisconnected = repos.GetById(304);
-
-                //var checkBeforeDeleteDisconnected = repos.GetById(289);
+                var checkBeforeCreationOfSecond = repos.GetById(309, null);
             }
 
-            var wCreate = new Warehouse() { Id = 308, City = "Sity308", State = "State308" };
-
-            var created = uoW.WarehouseRepositoryDisconnected.Create(dataSet1, adapter1, wCreate);
-
-            var wUpdate = new Warehouse() { Id = 304, City = "SityUpdate", State = "StateUpdate" };
-
-            var updated = uoW.WarehouseRepositoryDisconnected.Update(dataSet1, adapter1, wUpdate);
-
-            //var deleted = uoW.RouteRepositoryDisconnected.DeleteByWarehouseId(dataSet, adapter, 289);
-
-            //uoW.RouteRepositoryDisconnected.ApplyChanges(adapter, dataSet);
-
-            //var deleted1 = uoW.WarehouseRepositoryDisconnected.Delete(dataSet1, adapter1, 289);
-
-            uoW.WarehouseRepositoryDisconnected.ApplyChanges(adapter1, dataSet1);
-
-            using (var uow1 = UnitOfWorkFactory.Create())
+            using (var uow = UnitOfWorkFactory.Create())
             {
-                var repos = new WarehouseRepositoryConnected(uow1);
+                var repos = new RouteRepositoryConnected(uow);
 
-                var checkAfterCreateDisconnected = repos.GetById(308);
-
-                var checkAfterUpdateDisconnected = repos.GetById(304);
-
-                //var checkAfterDeleteDisconnected = repos.GetById(289);
+                var checkBeforeCreationRoute = repos.GetById(308, 309);
             }
 
-            uoW.WarehouseRepositoryDisconnected.Rollback();
+            var wCreateFirst = new Warehouse() { Id = 308, City = "SityFirst", State = "StateFirst" };
 
-            //uoW.RouteRepositoryDisconnected.Rollback();
+            var wCreateSecond = new Warehouse() { Id = 309, City = "SitySecond", State = "StateSecond" };
 
-            using (var uow2 = UnitOfWorkFactory.Create())
+            uoW.WarehouseRepositoryDisconnected.Create(dataSetWarehouse, adapterWarehouse, wCreateFirst);
+
+            uoW.WarehouseRepositoryDisconnected.Create(dataSetWarehouse, adapterWarehouse, wCreateSecond);
+
+            var routeCreate = new RouteOfCargo()
             {
-                var repos = new WarehouseRepositoryConnected(uow2);
+                Id = 1,
+                OriginWarehouseId = 308,
+                DestinationWarehouseId = 309,
+                Distance = 100
+            };
 
-                var checkCreateAfterRollbackDisconnected = repos.GetById(308);
+           uoW.RouteRepositoryDisconnected.Create(dataSetRoute, adapterRoute, routeCreate);
 
-                var checkUpdateAfterRollbackDisconnected = repos.GetById(304);
+            using (var connection = uoW.Connection())
+            {
+                connection.Open();
 
-                //var checkDeleteAfterRollbackDisconnected = repos.GetById(3);
+                var transaction = connection.BeginTransaction(IsolationLevel.ReadUncommitted);
+
+                uoW.WarehouseRepositoryDisconnected.ApplyChanges(adapterWarehouse, dataSetWarehouse, transaction);
+
+                uoW.RouteRepositoryDisconnected.ApplyChanges(adapterRoute, dataSetRoute, transaction);
+
+                using (var uow = UnitOfWorkFactory.Create())
+                {
+                    var repos = new WarehouseRepositoryConnected(uow);
+
+                    var checkAfterCreationOfFirst = repos.GetById(308, null);
+
+                    var checkAfterCreationOfSecond = repos.GetById(309, null);
+                }
+
+
+                using (var uow = UnitOfWorkFactory.Create())
+                {
+                    var repos = new RouteRepositoryConnected(uow);
+
+                    var checkAfterCreationRoute = repos.GetById(308, 309);
+                }
+
+                transaction.Rollback();
+
+                connection.Close();
             }
 
 
+            using (var uow = UnitOfWorkFactory.Create())
+            {
+                var repos = new WarehouseRepositoryConnected(uow);
 
+                var checkAfterRollbackfFirst = repos.GetById(308, null);
 
+                var checkAfterRollbackOfSecond = repos.GetById(309, null);
+            }
 
+            using (var uow = UnitOfWorkFactory.Create())
+            {
+                var repos = new RouteRepositoryConnected(uow);
 
+                var checkAfterRollbackRoute = repos.GetById(308, 309);
+            }
 
-
-
-
-
-
-
-
-            //var uow = new UnitOfWork();
-            //var w = new Warehouse() { Id = 297, City = "Sity", State = "State" };
-            //uow.WarehouseRepositoryConnected.Create(w, true, System.Data.IsolationLevel.ReadCommitted);
-            //var w1 = new Warehouse() { Id = 297, City = "Sity1", State = "State1" };
-            //uow.WarehouseRepositoryConnected.Update(w1, true, System.Data.IsolationLevel.ReadCommitted);
-            //uow.WarehouseRepositoryConnected.Delete(290, true, System.Data.IsolationLevel.ReadCommitted);
-            //var list = uow.WarehouseRepositoryConnected.GetAll().ToList();
-            //foreach (var item in list)
-            //{
-            //    Console.WriteLine(item.Id + " " + item.City + " " + item.State);
-            //}
-
-            //var r1 = new RouteOfCargo() { Id = 1, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
-            //uow.RouteRepositoryConnected.Update(r1, true, System.Data.IsolationLevel.ReadCommitted);
-            //uow.RouteRepositoryConnected.Delete(1, true, System.Data.IsolationLevel.ReadCommitted);
-
-            //var list1 = uow.RouteRepositoryConnected.GetAll().ToList();
-            //foreach (var item in list1)
-            //{
-            //    Console.WriteLine(item.Id + " " + item.OriginWarehouseId + " " + item.DestinationWarehouseId);
-            //}
-
-            //Disconnected
-            ////////
-            //var w22 = new Warehouse() { Id = 299, City = "Sity", State = "State" };
-            //uow.WarehouseRepositoryDisconnected.Create(w22, true, System.Data.IsolationLevel.ReadCommitted);
-            //var w2 = new Warehouse() { Id = 293, City = "Sity3", State = "State3" };
-            //uow.WarehouseRepositoryDisconnected.Update(w2, true, System.Data.IsolationLevel.ReadCommitted);
-            //uow.WarehouseRepositoryDisconnected.Delete(298, true, System.Data.IsolationLevel.ReadCommitted);
-
-            //var list2 = uow.WarehouseRepositoryDisconnected.GetAll().ToList();
-            //foreach (var item in list2)
-            //{
-            //    Console.WriteLine(item.Id + " " + item.City + " " + item.State);
-            //}
-            //uow.WarehouseRepositoryConnected.Delete(295, true, System.Data.IsolationLevel.ReadCommitted);
-
-
-
-
-            //var adapter = new SqlDataAdapter();
-            //var dataSet = uow.RouteRepositoryDisconnected.GetAll(adapter);
-            //var r1 = new RouteOfCargo() { Id = 100000, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
-            //var r2 = new RouteOfCargo() { Id = 6, OriginWarehouseId = 1, DestinationWarehouseId = 1, Distance = 100 };
-            //var created = uow.RouteRepositoryDisconnected.Create(dataSet, adapter, r1);
-            //var updated = uow.RouteRepositoryDisconnected.Update(dataSet, adapter, r2);
-            //var deleted = uow.RouteRepositoryDisconnected.Delete(dataSet, adapter, 5);
-            //uow.RouteRepositoryDisconnected.Save(adapter, dataSet);
-
-            //var adapter1 = new SqlDataAdapter();
-            //var dataSet1 = uow.WarehouseRepositoryDisconnected.GetAll(adapter1);
-            //var w = new Warehouse() { Id = 300, City = "Sity299", State = "State" };
-            //var w1 = new Warehouse() { Id = 291, City = "Sity", State = "State" };
-            //var created1 = uow.WarehouseRepositoryDisconnected.Create(dataSet1, adapter1, w);
-            //var updated1 = uow.WarehouseRepositoryDisconnected.Update(dataSet1, adapter1, w1);
-            //var deleted = uow.RouteRepositoryDisconnected.DeleteByWarehouseId(dataSet, adapter, 293);
-            //uow.RouteRepositoryDisconnected.Save(adapter, dataSet);
-            //var deleted1 = uow.WarehouseRepositoryDisconnected.Delete(dataSet1, adapter1, 293);
-            //uow.WarehouseRepositoryDisconnected.Save(adapter1, dataSet1);
-
-            //uow.RouteRepositoryDisconnected.Delete(1, true, System.Data.IsolationLevel.ReadCommitted);
-
-            //var list1 = uow.RouteRepositoryDisconnected.GetAll().ToList();
-            //foreach (var item in list1)
-            //{
-            //    Console.WriteLine(item.Id + " " + item.OriginWarehouseId + " " + item.DestinationWarehouseId);
-            //}
-
-
-            //uow.WarehouseRepositoryConnected.Create("INSERT[dbo].[Warehouse]([Id], [City], [State]) VALUES(296, N'College Station', N'Texas')");
-            //uow.WarehouseRepositoryConnected.Update("UPDATE [dbo].[Warehouse] set [City] = 'College' where [Id] = 296");
-            //uow.WarehouseRepositoryConnected.GetById(296);
-            //uow.WarehouseRepositoryConnected.Delete("delete from [dbo].[Warehouse] where [Id] = 296");
-            //uow.WarehouseRepositoryConnected.GetAll();
-
-            //uow.RouteRepositoryConnected.Create("INSERT[dbo].RouteOfCargo (OriginWarehouseId, DestinationWarehouseId, Distance) VALUES(1, 2, 1000)");
-            //uow.RouteRepositoryConnected.GetById(1);
-            //uow.RouteRepositoryConnected.GetAll();
         }
     }
 }

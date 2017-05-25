@@ -12,14 +12,14 @@ namespace CDP.AdoNet.Repositories
     public class WarehouseRepositoryConnected : IRepository<Warehouse>
     {
 
-        private readonly AdoNetUnitOfWork _unitOfWork;
+        private readonly UnitOfWorkConnected _unitOfWork;
 
-        public WarehouseRepositoryConnected(IUnitOfWorkAdo uow)
+        public WarehouseRepositoryConnected(Interfaces.IUnitOfWorkConnected uow)
         {
             if (uow == null)
                 throw new ArgumentNullException("uow");
 
-            _unitOfWork = uow as AdoNetUnitOfWork;
+            _unitOfWork = uow as UnitOfWorkConnected;
             if (_unitOfWork == null)
                 throw new NotSupportedException("Ohh my, change that UnitOfWorkFactory, will you?");
         }
@@ -71,11 +71,11 @@ namespace CDP.AdoNet.Repositories
             }
         }
 
-        public Warehouse GetById(int id)
+        public Warehouse GetById(int originId, int? destinationId)
         {
             using (var command = _unitOfWork.CreateCommand())
             {
-                command.CommandText = $"SELECT Id, City, State FROM dbo.Warehouse  WHERE Id = {id}";
+                command.CommandText = $"SELECT Id, City, State FROM dbo.Warehouse  WHERE Id = {originId}";
                 using (var reader = command.ExecuteReader())
                 {
                     var warehouses = new List<Warehouse>();

@@ -10,14 +10,14 @@ namespace CDP.AdoNet.Repositories
 {
     public class RouteRepositoryConnected : IRepository<RouteOfCargo>
     {
-        private readonly AdoNetUnitOfWork _unitOfWork;
+        private readonly UnitOfWorkConnected _unitOfWork;
 
-        public RouteRepositoryConnected(IUnitOfWorkAdo uow)
+        public RouteRepositoryConnected(Interfaces.IUnitOfWorkConnected uow)
         {
             if (uow == null)
                 throw new ArgumentNullException("uow");
 
-            _unitOfWork = uow as AdoNetUnitOfWork;
+            _unitOfWork = uow as UnitOfWorkConnected;
             if (_unitOfWork == null)
                 throw new NotSupportedException("Ohh my, change that UnitOfWorkFactory, will you?");
         }
@@ -71,12 +71,12 @@ namespace CDP.AdoNet.Repositories
             }
         }
 
-        public RouteOfCargo GetById(int id)
+        public RouteOfCargo GetById(int originId, int? destinationId)
         {
             using (var command = _unitOfWork.CreateCommand())
             {
                 command.CommandText = "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo " +
-                                      $"WHERE Id = {id}";
+                                      $"WHERE OriginWarehouseId = {originId} AND DestinationWarehouseId = {destinationId}";
                 using (var reader = command.ExecuteReader())
                 {
                     var routes = new List<RouteOfCargo>();

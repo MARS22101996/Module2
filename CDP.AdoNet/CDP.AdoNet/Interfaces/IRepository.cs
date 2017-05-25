@@ -8,6 +8,6 @@ namespace CDP.AdoNet.Interfaces
         void Update(T item );
         void Delete(int id );
         IEnumerable<T> GetAll();
-        T GetById(int id);
+        T GetById(int originId, int? destinationId);
     }
 }

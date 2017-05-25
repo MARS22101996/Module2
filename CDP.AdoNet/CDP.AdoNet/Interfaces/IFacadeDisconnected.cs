@@ -1,15 +1,14 @@
-﻿using CDP.AdoNet.Models;
+﻿using System.Data.SqlClient;
+using CDP.AdoNet.Models;
 
 namespace CDP.AdoNet.Interfaces
 {
-    public interface IUnitOfWork
+    public interface IFacadeDisconnected
     {
-        //IRepository<Warehouse> WarehouseRepositoryConnected { get;}
-
         IRepositoryDisconnected<Warehouse> WarehouseRepositoryDisconnected { get; }
 
-        //IRepository<RouteOfCargo> RouteRepositoryConnected { get; }
-
         IRouteRepositoryDisconnected RouteRepositoryDisconnected { get; }
+
+        SqlConnection Connection();
     }
 }

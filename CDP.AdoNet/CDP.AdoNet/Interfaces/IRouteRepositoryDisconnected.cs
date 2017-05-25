@@ -6,6 +6,6 @@ namespace CDP.AdoNet.Interfaces
 {
     public interface IRouteRepositoryDisconnected : IRepositoryDisconnected<RouteOfCargo>
     {
-        DataSet DeleteByWarehouseId(DataSet dataSet, SqlDataAdapter adapter, int id);
+        void DeleteByWarehouseId(DataSet dataSet, SqlDataAdapter adapter, int id);
     }
 }

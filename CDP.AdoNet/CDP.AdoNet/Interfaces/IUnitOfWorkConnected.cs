@@ -2,7 +2,7 @@
 
 namespace CDP.AdoNet.Interfaces
 {
-    public interface IUnitOfWorkAdo : IDisposable
+    public interface IUnitOfWorkConnected : IDisposable
     {
         void SaveChanges();
 

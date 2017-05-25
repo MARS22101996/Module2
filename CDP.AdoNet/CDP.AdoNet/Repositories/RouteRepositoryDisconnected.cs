@@ -2,7 +2,6 @@
 using CDP.AdoNet.Interfaces;
 using System.Data.SqlClient;
 using CDP.AdoNet.Models;
-using System;
 
 namespace CDP.AdoNet.Repositories
 {
@@ -10,32 +9,31 @@ namespace CDP.AdoNet.Repositories
     {
         private readonly SqlConnection _connection;
 
-        private SqlTransaction _transaction;
-
         public RouteRepositoryDisconnected(SqlConnection connectionString)
         {
             _connection = connectionString;
         }
 
-        public DataSet Create(DataSet dataSet, SqlDataAdapter adapter, RouteOfCargo obj)
-        {           
-            DataRow anyRow = dataSet.Tables["RouteOfCargo"].NewRow();
+        public void Create(DataSet dataSet, SqlDataAdapter adapter, RouteOfCargo obj)
+        {
+            var anyRow = dataSet.Tables["RouteOfCargo"].NewRow();
+            anyRow["Id"] = obj.Id;
             anyRow["OriginWarehouseId"] = obj.OriginWarehouseId;
             anyRow["DestinationWarehouseId"] = obj.DestinationWarehouseId;
             anyRow["Distance"] = obj.Distance;
             dataSet.Tables["RouteOfCargo"].Rows.Add(anyRow);
             var commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-            return dataSet;
         }
 
         public DataSet GetAll(SqlDataAdapter adapter)
         {
-            const string query = "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo";
-
-            using (var command = new SqlCommand(query, _connection))
+          
+            using (var command = _connection.CreateCommand())
             {
                 _connection.Open();
+                command.CommandText=
+                    "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo";
                 adapter.TableMappings.Add("Table", "RouteOfCargo");
                 adapter.SelectCommand = command;
                 var dataSet = new DataSet("RouteOfCargo");
@@ -45,7 +43,7 @@ namespace CDP.AdoNet.Repositories
             }
         }
 
-        public DataSet Update(DataSet dataSet, SqlDataAdapter adapter, RouteOfCargo obj)
+        public void Update(DataSet dataSet, SqlDataAdapter adapter, RouteOfCargo obj)
         {
             var row =
                 dataSet.Tables["RouteOfCargo"].Select($"Id = '{obj.Id}'");
@@ -54,27 +52,24 @@ namespace CDP.AdoNet.Repositories
             row[0]["Distance"] = obj.Distance;
             var commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-            return dataSet;
         }
 
-        public void ApplyChanges(SqlDataAdapter adapter, DataSet dataSet)
+        public void ApplyChanges(SqlDataAdapter adapter, DataSet dataSet, SqlTransaction transaction)
         {
-            _connection.Open();
-            _transaction = _connection.BeginTransaction();
+            adapter.UpdateCommand.Transaction = transaction;
+            adapter.SelectCommand.Transaction = transaction;
             adapter.Update(dataSet);
         }
-
-        public DataSet Delete(DataSet dataSet, SqlDataAdapter adapter, int id)
+        public void Delete(DataSet dataSet, SqlDataAdapter adapter, int id)
         {
             var row =
                dataSet.Tables["RouteOfCargo"].Select($"Id = '{id}'");
             row[0].Delete();
             var commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-            return dataSet;
         }
 
-        public DataSet DeleteByWarehouseId(DataSet dataSet, SqlDataAdapter adapter, int id)
+        public void DeleteByWarehouseId(DataSet dataSet, SqlDataAdapter adapter, int id)
         {
             var rows =
                dataSet.Tables["RouteOfCargo"].Select($"OriginWarehouseId = '{id}' OR DestinationWarehouseId = '{id}'");
@@ -84,25 +79,6 @@ namespace CDP.AdoNet.Repositories
             }
             var commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
-            return dataSet;
-        }
-
-        public void Commit()
-        {
-            if (_transaction == null)
-                throw new InvalidOperationException("Transaction have already been commited. Check your transaction handling.");
-            _transaction.Commit();
-            _transaction = null;
-            _connection.Close();
-        }
-
-        public void Rollback()
-        {
-            if (_transaction == null)
-                throw new InvalidOperationException("Transaction have already been rollbacked. Check your transaction handling.");
-            _transaction.Rollback();
-            _transaction = null;
-            _connection.Close();
         }
     }
 }
