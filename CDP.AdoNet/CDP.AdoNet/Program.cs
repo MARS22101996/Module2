@@ -16,9 +16,9 @@ namespace CDP.AdoNet
 
                 var checkBeforeCreate = repos.GetById(308, null);
 
-                var checkBeforeUpdate = repos.GetById(200,null);
+                var checkBeforeUpdate = repos.GetById(2,null);
 
-                var checkBeforeDelete = repos.GetById(289, null);
+                var checkBeforeDelete = repos.GetById(1, null);
 
                 Console.WriteLine(
                     checkBeforeCreate != null
@@ -39,17 +39,17 @@ namespace CDP.AdoNet
 
                 repos.Create(wCreate);
 
-                var wUpdate = new Warehouse() { Id = 200, City = "SityUpdate", State = "StateUpdate" };
+                var wUpdate = new Warehouse() { Id = 2, City = "SityUpdate", State = "StateUpdate" };
 
                 repos.Update(wUpdate);
 
-                repos.Delete(289);
+                repos.Delete(1);
 
-                var checkAfterUpdate = repos.GetById(200, null);
+                var checkAfterUpdate = repos.GetById(2, null);
 
                 var checkAfterCreate = repos.GetById(308, null);
 
-                var checkAfterDelete = repos.GetById(289, null);
+                var checkAfterDelete = repos.GetById(1, null);
 
                 Console.WriteLine(
                     checkAfterCreate != null
@@ -70,24 +70,24 @@ namespace CDP.AdoNet
 
                 var checkCreateAfterRollback = repos.GetById(308, null);
 
-                var checkUpdateAfterRollback = repos.GetById(200, null);
+                var checkUpdateAfterRollback = repos.GetById(2, null);
 
-                var checkDeleteAfterRollback = repos.GetById(289, null);
+                var checkDeleteAfterRollback = repos.GetById(1, null);
 
                 Console.WriteLine(
                     checkCreateAfterRollback != null
-                        ? $"Warehouse after creating: Id: {checkCreateAfterRollback.Id} City: {checkCreateAfterRollback.City} State: {checkCreateAfterRollback.State}"
-                        : "Warehouse after creating is null");
+                        ? $"Warehouse after rollbacking of creating: Id: {checkCreateAfterRollback.Id} City: {checkCreateAfterRollback.City} State: {checkCreateAfterRollback.State}"
+                        : "Warehouse after rollbacking of creating is null");
 
                 Console.WriteLine(
                     checkUpdateAfterRollback != null
-                        ? $"Warehouse after updating: Id: {checkUpdateAfterRollback.Id} City: {checkUpdateAfterRollback.City} State: {checkUpdateAfterRollback.State}"
-                        : "Warehouse after updating is null");
+                        ? $"Warehouse after rollbacking of updating : Id: {checkUpdateAfterRollback.Id} City: {checkUpdateAfterRollback.City} State: {checkUpdateAfterRollback.State}"
+                        : "Warehouse after rollbacking of updating is null");
 
                 Console.WriteLine(
                     checkDeleteAfterRollback != null
-                        ? $"Warehouse after deleting: Id: {checkDeleteAfterRollback.Id} City: {checkDeleteAfterRollback.City} State: {checkDeleteAfterRollback.State}"
-                        : "Warehouse after deleting is null");
+                        ? $"Warehouse after rollbacking of deleting: Id: {checkDeleteAfterRollback.Id} City: {checkDeleteAfterRollback.City} State: {checkDeleteAfterRollback.State}"
+                        : "Warehouse after rollbacking of deleting is null");
             }
         }
     }

@@ -25,7 +25,6 @@ namespace CDP.AdoNet.Infrastructure
                 _routeRepositoryDisconnected ??
                 (_routeRepositoryDisconnected = new RouteRepositoryDisconnected(_connection));
 
-
         public SqlConnection Connection()
         {
             return _connection;

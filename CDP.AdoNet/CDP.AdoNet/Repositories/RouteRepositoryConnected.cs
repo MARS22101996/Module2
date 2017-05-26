@@ -15,11 +15,11 @@ namespace CDP.AdoNet.Repositories
         public RouteRepositoryConnected(ITransactionWrapperConnected uow)
         {
             if (uow == null)
-                throw new ArgumentNullException("uow");
+                throw new ArgumentNullException();
 
             _transactionWrapper = uow as TransactionWrapperConnected;
             if (_transactionWrapper == null)
-                throw new NotSupportedException("Ohh my, change that UnitOfWorkFactory, will you?");
+                throw new NotSupportedException();
         }
 
         public void Create(RouteOfCargo obj)
