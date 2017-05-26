@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using CDP.AdoNet.UnitOfWorks;
+using CDP.AdoNet.Infrastructure;
 
 
 namespace CDP.AdoNet.Repositories
@@ -12,21 +12,21 @@ namespace CDP.AdoNet.Repositories
     public class WarehouseRepositoryConnected : IRepository<Warehouse>
     {
 
-        private readonly UnitOfWorkConnected _unitOfWork;
+        private readonly TransactionWrapperConnected _transactionWrapper;
 
-        public WarehouseRepositoryConnected(Interfaces.IUnitOfWorkConnected uow)
+        public WarehouseRepositoryConnected(ITransactionWrapperConnected uow)
         {
             if (uow == null)
-                throw new ArgumentNullException("uow");
+                throw new ArgumentNullException();
 
-            _unitOfWork = uow as UnitOfWorkConnected;
-            if (_unitOfWork == null)
-                throw new NotSupportedException("Ohh my, change that UnitOfWorkFactory, will you?");
+            _transactionWrapper = uow as TransactionWrapperConnected;
+            if (_transactionWrapper == null)
+                throw new NotSupportedException();
         }
 
         public void Create(Warehouse obj)
         {
-            using (var cmd = _unitOfWork.CreateCommand())
+            using (var cmd = _transactionWrapper.CreateCommand())
             {
                 cmd.CommandText= $"INSERT dbo.Warehouse (Id, City, State) VALUES({obj.Id}, '{obj.City}', '{obj.State}')";
                 cmd.ExecuteNonQuery();
@@ -35,7 +35,7 @@ namespace CDP.AdoNet.Repositories
 
         public IEnumerable<Warehouse> GetAll()
         {
-            using (var command = _unitOfWork.CreateCommand())
+            using (var command = _transactionWrapper.CreateCommand())
             {
                 command.CommandText = "SELECT Id, City, State FROM dbo.Warehouse";
                 using (var reader = command.ExecuteReader())
@@ -54,7 +54,7 @@ namespace CDP.AdoNet.Repositories
 
         public void Update(Warehouse obj)
         {
-            using (var cmd = _unitOfWork.CreateCommand())
+            using (var cmd = _transactionWrapper.CreateCommand())
             {
                 cmd.CommandText = $"UPDATE dbo.Warehouse SET City = '{obj.City}', State = '{obj.State}' WHERE Id = {obj.Id}";
                 cmd.ExecuteNonQuery();
@@ -63,7 +63,7 @@ namespace CDP.AdoNet.Repositories
 
         public void Delete(int id)
         {
-            using (var cmd = _unitOfWork.CreateCommand())
+            using (var cmd = _transactionWrapper.CreateCommand())
             {
                 cmd.CommandText = $"DELETE FROM dbo.RouteOfCargo WHERE OriginWarehouseId = {id} " +
                         $"OR DestinationWarehouseId = {id}; DELETE from dbo.Warehouse WHERE Id = {id}";
@@ -73,7 +73,7 @@ namespace CDP.AdoNet.Repositories
 
         public Warehouse GetById(int originId, int? destinationId)
         {
-            using (var command = _unitOfWork.CreateCommand())
+            using (var command = _transactionWrapper.CreateCommand())
             {
                 command.CommandText = $"SELECT Id, City, State FROM dbo.Warehouse  WHERE Id = {originId}";
                 using (var reader = command.ExecuteReader())

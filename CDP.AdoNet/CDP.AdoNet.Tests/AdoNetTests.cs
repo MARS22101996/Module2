@@ -1,9 +1,9 @@
 ﻿using System.Data.SqlClient;
 using CDP.AdoNet.Models;
 using CDP.AdoNet.Repositories;
-using CDP.AdoNet.UnitOfWorks;
 using NUnit.Framework;
 using System.Data;
+using CDP.AdoNet.Infrastructure;
 
 namespace CDP.AdoNet.Tests
 {
@@ -17,20 +17,17 @@ namespace CDP.AdoNet.Tests
             Warehouse checkBeforeCreationOfSecond;
             RouteOfCargo checkBeforeCreationRoute;
 
-            using (var uow = UnitOfWorkFactory.Create())
+            using (var uow = TransactionWrapperFactory.Create())
             {
-                var repos = new WarehouseRepositoryConnected(uow);
+                var repositoryWarehouse = new WarehouseRepositoryConnected(uow);
 
-                 checkBeforeCreationOfFirst = repos.GetById(308, null);
+                checkBeforeCreationOfFirst = repositoryWarehouse.GetById(308, null);
 
-                 checkBeforeCreationOfSecond = repos.GetById(309, null);
-            }
+                checkBeforeCreationOfSecond = repositoryWarehouse.GetById(309, null);
 
-            using (var uow = UnitOfWorkFactory.Create())
-            {
-                var repos = new RouteRepositoryConnected(uow);
+                var repositoryRoute = new RouteRepositoryConnected(uow);
 
-                checkBeforeCreationRoute = repos.GetById(308, 309);
+                checkBeforeCreationRoute = repositoryRoute.GetById(308, 309);
             }
 
             Assert.AreEqual(null, checkBeforeCreationOfFirst);
@@ -83,20 +80,17 @@ namespace CDP.AdoNet.Tests
 
                 uoW.RouteRepositoryDisconnected.ApplyChanges(adapterRoute, dataSetRoute, transaction);
 
-                using (var uow = UnitOfWorkFactory.Create())
+                using (var uow = TransactionWrapperFactory.Create())
                 {
-                    var repos = new WarehouseRepositoryConnected(uow);
+                    var repositoryWarehouse = new WarehouseRepositoryConnected(uow);
 
-                    checkAfterCreationOfFirst = repos.GetById(308, null);
+                    checkAfterCreationOfFirst = repositoryWarehouse.GetById(308, null);
 
-                    checkAfterCreationOfSecond = repos.GetById(309, null);
-                }
+                    checkAfterCreationOfSecond = repositoryWarehouse.GetById(309, null);
 
-                using (var uow = UnitOfWorkFactory.Create())
-                {
-                    var repos = new RouteRepositoryConnected(uow);
+                    var repositoryRoute = new RouteRepositoryConnected(uow);
 
-                    checkAfterCreationRoute = repos.GetById(308, 309);
+                    checkAfterCreationRoute = repositoryRoute.GetById(308, 309);
                 }
 
                 transaction.Rollback();
@@ -116,20 +110,17 @@ namespace CDP.AdoNet.Tests
             Warehouse checkAfterRollbackSecond;
             RouteOfCargo checkAfterCreationRoute;
 
-            using (var uow = UnitOfWorkFactory.Create())
+            using (var uow = TransactionWrapperFactory.Create())
             {
-                var repos = new WarehouseRepositoryConnected(uow);
+                var repositoryWarehouse = new WarehouseRepositoryConnected(uow);
 
-                checkAfterRollbackfFirst = repos.GetById(308, null);
+                checkAfterRollbackfFirst = repositoryWarehouse.GetById(308, null);
 
-                checkAfterRollbackSecond = repos.GetById(309, null);
-            }
+                checkAfterRollbackSecond = repositoryWarehouse.GetById(309, null);
 
-            using (var uow = UnitOfWorkFactory.Create())
-            {
-                var repos = new RouteRepositoryConnected(uow);
+                var repositoryRoute = new RouteRepositoryConnected(uow);
 
-                checkAfterCreationRoute = repos.GetById(308, 309);
+                checkAfterCreationRoute = repositoryRoute.GetById(308, 309);
             }
 
             Assert.AreEqual(null, checkAfterRollbackfFirst);

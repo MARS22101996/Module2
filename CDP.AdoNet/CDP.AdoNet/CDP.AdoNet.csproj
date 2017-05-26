@@ -48,7 +48,7 @@
     <Compile Include="Interfaces\IRepositoryDisconnected.cs" />
     <Compile Include="Interfaces\IRouteRepositoryDisconnected.cs" />
     <Compile Include="Interfaces\IFacadeDisconnected.cs" />
-    <Compile Include="Interfaces\IUnitOfWorkConnected.cs" />
+    <Compile Include="Interfaces\ITransactionWrapperConnected.cs" />
     <Compile Include="Models\RouteOfCargo.cs" />
     <Compile Include="Models\Warehouse.cs" />
     <Compile Include="Program.cs" />
@@ -57,9 +57,9 @@
     <Compile Include="Repositories\RouteRepositoryDisconnected.cs" />
     <Compile Include="Repositories\WarehouseRepositoryConnected.cs" />
     <Compile Include="Repositories\WarehouseRepositoryDisconnected.cs" />
-    <Compile Include="UnitOfWorks\UnitOfWorkConnected.cs" />
-    <Compile Include="UnitOfWorks\FacadeDisconnected.cs" />
-    <Compile Include="UnitOfWorks\UnitOfWorkFactory.cs" />
+    <Compile Include="Infrastructure\TransactionWrapperConnected.cs" />
+    <Compile Include="Infrastructure\FacadeDisconnected.cs" />
+    <Compile Include="Infrastructure\TransactionWrapperFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

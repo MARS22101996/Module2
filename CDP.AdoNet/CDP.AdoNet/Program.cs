@@ -1,10 +1,7 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
+﻿using System;
+using CDP.AdoNet.Infrastructure;
 using CDP.AdoNet.Models;
 using CDP.AdoNet.Repositories;
-using CDP.AdoNet.UnitOfWorks;
 
 namespace CDP.AdoNet
 {
@@ -13,42 +10,87 @@ namespace CDP.AdoNet
         static void Main(string[] args)
         {
 
-            //Connected Warehouse
-            //using (var uow = UnitOfWorkFactory.Create())
-            //{
-            //    var repos = new WarehouseRepositoryConnected(uow);
+            //Connected Warehouse example
+            using (var uow = TransactionWrapperFactory.Create())
+            {
+                var repos = new WarehouseRepositoryConnected(uow);
 
-            //    var checkBeforeCreate = repos.GetById(308);
+                var checkBeforeCreate = repos.GetById(308, null);
 
-            //    var checkBeforeUpdate = repos.GetById(308);
+                var checkBeforeUpdate = repos.GetById(200,null);
 
-            //    var checkBeforeDelete = repos.GetById(289);
+                var checkBeforeDelete = repos.GetById(289, null);
 
-            //    var wCreate = new Warehouse() { Id = 308, City = "Sity308", State = "State308" };
+                Console.WriteLine(
+                    checkBeforeCreate != null
+                        ? $"Warehouse before creating: Id: {checkBeforeCreate.Id} City: {checkBeforeCreate.City} State: {checkBeforeCreate.State}"
+                        : "Warehouse before creating is null");
 
-            //    repos.Create(wCreate);
+                Console.WriteLine(
+                    checkBeforeUpdate != null
+                        ? $"Warehouse before updating: Id: {checkBeforeUpdate.Id} City: {checkBeforeUpdate.City} State: {checkBeforeUpdate.State}"
+                        : "Warehouse before updating is null");
 
-            //    var wUpdate = new Warehouse() { Id = 304, City = "SityUpdate", State = "StateUpdate" };
+                Console.WriteLine(
+                    checkBeforeUpdate != null
+                        ? $"Warehouse before deleting: Id: {checkBeforeDelete.Id} City: {checkBeforeDelete.City} State: {checkBeforeDelete.State}"
+                        : "Warehouse before deleting is null");
 
-            //    repos.Update(wUpdate);
+                var wCreate = new Warehouse() { Id = 308, City = "SityCreate", State = "StateCreate" };
 
-            //    repos.Delete(289);
+                repos.Create(wCreate);
 
-            //    var checkAfterUpdate = repos.GetById(304);
+                var wUpdate = new Warehouse() { Id = 200, City = "SityUpdate", State = "StateUpdate" };
 
-            //    var checkAfterCreate = repos.GetById(308);
+                repos.Update(wUpdate);
 
-            //    var checkAfterDelete = repos.GetById(289);
+                repos.Delete(289);
 
-            //    uow.Rollback();
+                var checkAfterUpdate = repos.GetById(200, null);
 
-            //    var checkCreateAfterRollback= repos.GetById(308);
+                var checkAfterCreate = repos.GetById(308, null);
 
-            //    var checkUpdateAfterRollback = repos.GetById(304);
+                var checkAfterDelete = repos.GetById(289, null);
 
-            //    var checkDeleteAfterRollback = repos.GetById(289);
+                Console.WriteLine(
+                    checkAfterCreate != null
+                        ? $"Warehouse after creating: Id: {checkAfterCreate.Id} City: {checkAfterCreate.City} State: {checkAfterCreate.State}"
+                        : "Warehouse after creating is null");
 
-            //}
+                Console.WriteLine(
+                    checkAfterUpdate != null
+                        ? $"Warehouse after updating: Id: {checkAfterUpdate.Id} City: {checkAfterUpdate.City} State: {checkAfterUpdate.State}"
+                        : "Warehouse after updating is null");
+
+                Console.WriteLine(
+                    checkAfterDelete != null
+                        ? $"Warehouse after deleting: Id: {checkAfterDelete.Id} City: {checkAfterDelete.City} State: {checkAfterDelete.State}"
+                        : "Warehouse after deleting is null");
+
+                uow.Rollback();
+
+                var checkCreateAfterRollback = repos.GetById(308, null);
+
+                var checkUpdateAfterRollback = repos.GetById(200, null);
+
+                var checkDeleteAfterRollback = repos.GetById(289, null);
+
+                Console.WriteLine(
+                    checkCreateAfterRollback != null
+                        ? $"Warehouse after creating: Id: {checkCreateAfterRollback.Id} City: {checkCreateAfterRollback.City} State: {checkCreateAfterRollback.State}"
+                        : "Warehouse after creating is null");
+
+                Console.WriteLine(
+                    checkUpdateAfterRollback != null
+                        ? $"Warehouse after updating: Id: {checkUpdateAfterRollback.Id} City: {checkUpdateAfterRollback.City} State: {checkUpdateAfterRollback.State}"
+                        : "Warehouse after updating is null");
+
+                Console.WriteLine(
+                    checkDeleteAfterRollback != null
+                        ? $"Warehouse after deleting: Id: {checkDeleteAfterRollback.Id} City: {checkDeleteAfterRollback.City} State: {checkDeleteAfterRollback.State}"
+                        : "Warehouse after deleting is null");
+
+            }
 
 
             //Connected Route
@@ -216,98 +258,98 @@ namespace CDP.AdoNet
             //}
 
 
-            var uoW = new FacadeDisconnected();
+           // var uoW = new FacadeDisconnected();
 
-            var adapterWarehouse = new SqlDataAdapter();
+           // var adapterWarehouse = new SqlDataAdapter();
 
-            var dataSetWarehouse = uoW.WarehouseRepositoryDisconnected.GetAll(adapterWarehouse);
+           // var dataSetWarehouse = uoW.WarehouseRepositoryDisconnected.GetAll(adapterWarehouse);
 
-            var adapterRoute = new SqlDataAdapter();
+           // var adapterRoute = new SqlDataAdapter();
 
-            var dataSetRoute = uoW.RouteRepositoryDisconnected.GetAll(adapterRoute);
+           // var dataSetRoute = uoW.RouteRepositoryDisconnected.GetAll(adapterRoute);
 
-            using (var uow = UnitOfWorkFactory.Create())
-            {
-                var repos = new WarehouseRepositoryConnected(uow);
+           // using (var uow = TransactionWrapperFactory.Create())
+           // {
+           //     var repos = new WarehouseRepositoryConnected(uow);
 
-                var checkBeforeCreationOfFirst = repos.GetById(308, null);
+           //     var checkBeforeCreationOfFirst = repos.GetById(308, null);
 
-                var checkBeforeCreationOfSecond = repos.GetById(309, null);
-            }
+           //     var checkBeforeCreationOfSecond = repos.GetById(309, null);
+           // }
 
-            using (var uow = UnitOfWorkFactory.Create())
-            {
-                var repos = new RouteRepositoryConnected(uow);
+           // using (var uow = TransactionWrapperFactory.Create())
+           // {
+           //     var repos = new RouteRepositoryConnected(uow);
 
-                var checkBeforeCreationRoute = repos.GetById(308, 309);
-            }
+           //     var checkBeforeCreationRoute = repos.GetById(308, 309);
+           // }
 
-            var wCreateFirst = new Warehouse() { Id = 308, City = "SityFirst", State = "StateFirst" };
+           // var wCreateFirst = new Warehouse() { Id = 308, City = "SityFirst", State = "StateFirst" };
 
-            var wCreateSecond = new Warehouse() { Id = 309, City = "SitySecond", State = "StateSecond" };
+           // var wCreateSecond = new Warehouse() { Id = 309, City = "SitySecond", State = "StateSecond" };
 
-            uoW.WarehouseRepositoryDisconnected.Create(dataSetWarehouse, adapterWarehouse, wCreateFirst);
+           // uoW.WarehouseRepositoryDisconnected.Create(dataSetWarehouse, adapterWarehouse, wCreateFirst);
 
-            uoW.WarehouseRepositoryDisconnected.Create(dataSetWarehouse, adapterWarehouse, wCreateSecond);
+           // uoW.WarehouseRepositoryDisconnected.Create(dataSetWarehouse, adapterWarehouse, wCreateSecond);
 
-            var routeCreate = new RouteOfCargo()
-            {
-                Id = 1,
-                OriginWarehouseId = 308,
-                DestinationWarehouseId = 309,
-                Distance = 100
-            };
+           // var routeCreate = new RouteOfCargo()
+           // {
+           //     Id = 1,
+           //     OriginWarehouseId = 308,
+           //     DestinationWarehouseId = 309,
+           //     Distance = 100
+           // };
 
-           uoW.RouteRepositoryDisconnected.Create(dataSetRoute, adapterRoute, routeCreate);
+           //uoW.RouteRepositoryDisconnected.Create(dataSetRoute, adapterRoute, routeCreate);
 
-            using (var connection = uoW.Connection())
-            {
-                connection.Open();
+           // using (var connection = uoW.Connection())
+           // {
+           //     connection.Open();
 
-                var transaction = connection.BeginTransaction(IsolationLevel.ReadUncommitted);
+           //     var transaction = connection.BeginTransaction(IsolationLevel.ReadUncommitted);
 
-                uoW.WarehouseRepositoryDisconnected.ApplyChanges(adapterWarehouse, dataSetWarehouse, transaction);
+           //     uoW.WarehouseRepositoryDisconnected.ApplyChanges(adapterWarehouse, dataSetWarehouse, transaction);
 
-                uoW.RouteRepositoryDisconnected.ApplyChanges(adapterRoute, dataSetRoute, transaction);
+           //     uoW.RouteRepositoryDisconnected.ApplyChanges(adapterRoute, dataSetRoute, transaction);
 
-                using (var uow = UnitOfWorkFactory.Create())
-                {
-                    var repos = new WarehouseRepositoryConnected(uow);
+           //     using (var uow = TransactionWrapperFactory.Create())
+           //     {
+           //         var repos = new WarehouseRepositoryConnected(uow);
 
-                    var checkAfterCreationOfFirst = repos.GetById(308, null);
+           //         var checkAfterCreationOfFirst = repos.GetById(308, null);
 
-                    var checkAfterCreationOfSecond = repos.GetById(309, null);
-                }
-
-
-                using (var uow = UnitOfWorkFactory.Create())
-                {
-                    var repos = new RouteRepositoryConnected(uow);
-
-                    var checkAfterCreationRoute = repos.GetById(308, 309);
-                }
-
-                transaction.Rollback();
-
-                connection.Close();
-            }
+           //         var checkAfterCreationOfSecond = repos.GetById(309, null);
+           //     }
 
 
-            using (var uow = UnitOfWorkFactory.Create())
-            {
-                var repos = new WarehouseRepositoryConnected(uow);
+           //     using (var uow = TransactionWrapperFactory.Create())
+           //     {
+           //         var repos = new RouteRepositoryConnected(uow);
 
-                var checkAfterRollbackfFirst = repos.GetById(308, null);
+           //         var checkAfterCreationRoute = repos.GetById(308, 309);
+           //     }
 
-                var checkAfterRollbackOfSecond = repos.GetById(309, null);
-            }
+           //     transaction.Rollback();
 
-            using (var uow = UnitOfWorkFactory.Create())
-            {
-                var repos = new RouteRepositoryConnected(uow);
+           //     connection.Close();
+           // }
 
-                var checkAfterRollbackRoute = repos.GetById(308, 309);
-            }
+
+           // using (var uow = TransactionWrapperFactory.Create())
+           // {
+           //     var repos = new WarehouseRepositoryConnected(uow);
+
+           //     var checkAfterRollbackfFirst = repos.GetById(308, null);
+
+           //     var checkAfterRollbackOfSecond = repos.GetById(309, null);
+           // }
+
+           // using (var uow = TransactionWrapperFactory.Create())
+           // {
+           //     var repos = new RouteRepositoryConnected(uow);
+
+           //     var checkAfterRollbackRoute = repos.GetById(308, 309);
+           // }
 
         }
     }

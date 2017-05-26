@@ -2,10 +2,9 @@
 using System.Data;
 using CDP.AdoNet.Interfaces;
 
-
-namespace CDP.AdoNet.UnitOfWorks
+namespace CDP.AdoNet.Infrastructure
 {
-    public class UnitOfWorkConnected : IUnitOfWorkConnected
+    public class TransactionWrapperConnected : ITransactionWrapperConnected
     {
         private IDbConnection _connection;
 
@@ -13,7 +12,7 @@ namespace CDP.AdoNet.UnitOfWorks
 
         private IDbTransaction _transaction;
 
-        public UnitOfWorkConnected(IDbConnection connection, bool ownsConnection)
+        public TransactionWrapperConnected(IDbConnection connection, bool ownsConnection)
         {
             _connection = connection;
             _ownsConnection = ownsConnection;
@@ -30,7 +29,8 @@ namespace CDP.AdoNet.UnitOfWorks
         public void SaveChanges()
         {
             if (_transaction == null)
-                throw new InvalidOperationException("Transaction have already been commited. Check your transaction handling.");
+                throw new InvalidOperationException(
+                    "Transaction have already been commited. Check your transaction handling.");
             _transaction.Commit();
             _transaction = null;
         }
@@ -38,7 +38,8 @@ namespace CDP.AdoNet.UnitOfWorks
         public void Rollback()
         {
             if (_transaction == null)
-                throw new InvalidOperationException("Transaction have already been rollbacked. Check your transaction handling.");
+                throw new InvalidOperationException(
+                    "Transaction have already been rollbacked. Check your transaction handling.");
             _transaction.Rollback();
             _transaction = null;
         }

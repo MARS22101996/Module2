@@ -1,17 +1,17 @@
 ﻿using System.Configuration;
 using System.Data.SqlClient;
 
-namespace CDP.AdoNet.UnitOfWorks
+namespace CDP.AdoNet.Infrastructure
 {
-    public class UnitOfWorkFactory
+    public class TransactionWrapperFactory
     {
-        public static UnitOfWorkConnected Create()
+        public static TransactionWrapperConnected Create()
         {
             var connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CDPDatabase"].ToString());
 
             connection.Open();
 
-            return new UnitOfWorkConnected(connection, true);
+            return new TransactionWrapperConnected(connection, true);
         }
     }
 }

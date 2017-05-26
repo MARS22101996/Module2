@@ -4,9 +4,8 @@ using System.Data.SqlClient;
 using CDP.AdoNet.Interfaces;
 using CDP.AdoNet.Models;
 using CDP.AdoNet.Repositories;
-using static System.GC;
 
-namespace CDP.AdoNet.UnitOfWorks
+namespace CDP.AdoNet.Infrastructure
 {
     public sealed class FacadeDisconnected : IFacadeDisconnected, IDisposable
     {
@@ -55,7 +54,7 @@ namespace CDP.AdoNet.UnitOfWorks
         public void Dispose()
         {
             Dispose(true);
-            SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
     }
 }
