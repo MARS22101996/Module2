@@ -28,7 +28,7 @@ namespace CDP.AdoNet.Repositories
             {
                 cmd.CommandText = "set IDENTITY_INSERT dbo.RouteOfCargo on;" +
                                   "INSERT dbo.RouteOfCargo (Id, OriginWarehouseId, DestinationWarehouseId, Distance) VALUES" +
-                                   $"( {obj.Id} , {obj.OriginWarehouseId} , {obj.DestinationWarehouseId} , {obj.Distance} )";
+                                  $"( {obj.Id} , {obj.OriginWarehouseId} , {obj.DestinationWarehouseId} , {obj.Distance} )";
                 cmd.ExecuteNonQuery();
             }
         }
@@ -37,7 +37,8 @@ namespace CDP.AdoNet.Repositories
         {
             using (var command = _transactionWrapper.CreateCommand())
             {
-                command.CommandText = "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo";
+                command.CommandText =
+                    "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo";
                 using (var reader = command.ExecuteReader())
                 {
                     var routes = new List<RouteOfCargo>();
@@ -57,7 +58,7 @@ namespace CDP.AdoNet.Repositories
             using (var cmd = _transactionWrapper.CreateCommand())
             {
                 cmd.CommandText = $"UPDATE dbo.RouteOfCargo SET OriginWarehouseId = {obj.OriginWarehouseId}," +
-                $" DestinationWarehouseId = {obj.DestinationWarehouseId}, Distance = {obj.Distance} WHERE Id = {obj.Id}";
+                                  $" DestinationWarehouseId = {obj.DestinationWarehouseId}, Distance = {obj.Distance} WHERE Id = {obj.Id}";
                 cmd.ExecuteNonQuery();
             }
         }
@@ -75,8 +76,9 @@ namespace CDP.AdoNet.Repositories
         {
             using (var command = _transactionWrapper.CreateCommand())
             {
-                command.CommandText = "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo " +
-                                      $"WHERE OriginWarehouseId = {originId} AND DestinationWarehouseId = {destinationId}";
+                command.CommandText =
+                    "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo " +
+                    $"WHERE OriginWarehouseId = {originId} AND DestinationWarehouseId = {destinationId}";
                 using (var reader = command.ExecuteReader())
                 {
                     var routes = new List<RouteOfCargo>();
@@ -93,9 +95,9 @@ namespace CDP.AdoNet.Repositories
 
         private void Map(IDataRecord record, RouteOfCargo route)
         {
-            route.Id = (int)record["Id"];
+            route.Id = (int) record["Id"];
             route.OriginWarehouseId = (int) (record["OriginWarehouseId"]);
-            route.DestinationWarehouseId = (int)(record["DestinationWarehouseId"]);
+            route.DestinationWarehouseId = (int) (record["DestinationWarehouseId"]);
             route.Distance = Convert.ToInt32(record["Distance"]);
         }
     }

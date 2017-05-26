@@ -11,7 +11,6 @@ namespace CDP.AdoNet.Repositories
 {
     public class WarehouseRepositoryConnected : IRepository<Warehouse>
     {
-
         private readonly TransactionWrapperConnected _transactionWrapper;
 
         public WarehouseRepositoryConnected(ITransactionWrapperConnected uow)
@@ -28,7 +27,8 @@ namespace CDP.AdoNet.Repositories
         {
             using (var cmd = _transactionWrapper.CreateCommand())
             {
-                cmd.CommandText= $"INSERT dbo.Warehouse (Id, City, State) VALUES({obj.Id}, '{obj.City}', '{obj.State}')";
+                cmd.CommandText =
+                    $"INSERT dbo.Warehouse (Id, City, State) VALUES({obj.Id}, '{obj.City}', '{obj.State}')";
                 cmd.ExecuteNonQuery();
             }
         }
@@ -56,7 +56,8 @@ namespace CDP.AdoNet.Repositories
         {
             using (var cmd = _transactionWrapper.CreateCommand())
             {
-                cmd.CommandText = $"UPDATE dbo.Warehouse SET City = '{obj.City}', State = '{obj.State}' WHERE Id = {obj.Id}";
+                cmd.CommandText =
+                    $"UPDATE dbo.Warehouse SET City = '{obj.City}', State = '{obj.State}' WHERE Id = {obj.Id}";
                 cmd.ExecuteNonQuery();
             }
         }
@@ -66,7 +67,7 @@ namespace CDP.AdoNet.Repositories
             using (var cmd = _transactionWrapper.CreateCommand())
             {
                 cmd.CommandText = $"DELETE FROM dbo.RouteOfCargo WHERE OriginWarehouseId = {id} " +
-                        $"OR DestinationWarehouseId = {id}; DELETE from dbo.Warehouse WHERE Id = {id}";
+                                  $"OR DestinationWarehouseId = {id}; DELETE from dbo.Warehouse WHERE Id = {id}";
                 cmd.ExecuteNonQuery();
             }
         }
@@ -89,9 +90,10 @@ namespace CDP.AdoNet.Repositories
                 }
             }
         }
+
         private void Map(IDataRecord record, Warehouse warehouse)
         {
-            warehouse.Id = (int)record["Id"];
+            warehouse.Id = (int) record["Id"];
             warehouse.City = record["City"].ToString();
             warehouse.State = record["State"].ToString();
         }

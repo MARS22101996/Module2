@@ -28,11 +28,10 @@ namespace CDP.AdoNet.Repositories
 
         public DataSet GetAll(SqlDataAdapter adapter)
         {
-          
             using (var command = _connection.CreateCommand())
             {
                 _connection.Open();
-                command.CommandText=
+                command.CommandText =
                     "SELECT Id, OriginWarehouseId, DestinationWarehouseId, Distance FROM dbo.RouteOfCargo";
                 adapter.TableMappings.Add("Table", "RouteOfCargo");
                 adapter.SelectCommand = command;
@@ -60,10 +59,11 @@ namespace CDP.AdoNet.Repositories
             adapter.SelectCommand.Transaction = transaction;
             adapter.Update(dataSet);
         }
+
         public void Delete(DataSet dataSet, SqlDataAdapter adapter, int id)
         {
             var row =
-               dataSet.Tables["RouteOfCargo"].Select($"Id = '{id}'");
+                dataSet.Tables["RouteOfCargo"].Select($"Id = '{id}'");
             row[0].Delete();
             var commandBuilder = new SqlCommandBuilder(adapter);
             adapter.UpdateCommand = commandBuilder.GetUpdateCommand();
@@ -72,7 +72,7 @@ namespace CDP.AdoNet.Repositories
         public void DeleteByWarehouseId(DataSet dataSet, SqlDataAdapter adapter, int id)
         {
             var rows =
-               dataSet.Tables["RouteOfCargo"].Select($"OriginWarehouseId = '{id}' OR DestinationWarehouseId = '{id}'");
+                dataSet.Tables["RouteOfCargo"].Select($"OriginWarehouseId = '{id}' OR DestinationWarehouseId = '{id}'");
             foreach (var row in rows)
             {
                 row.Delete();

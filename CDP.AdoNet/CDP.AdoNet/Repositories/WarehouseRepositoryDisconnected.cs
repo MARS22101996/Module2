@@ -53,9 +53,9 @@ namespace CDP.AdoNet.Repositories
 
         public void ApplyChanges(SqlDataAdapter adapter, DataSet dataSet, SqlTransaction transaction)
         {
-                adapter.UpdateCommand.Transaction = transaction;
-                adapter.SelectCommand.Transaction = transaction;
-                adapter.Update(dataSet);
+            adapter.UpdateCommand.Transaction = transaction;
+            adapter.SelectCommand.Transaction = transaction;
+            adapter.Update(dataSet);
         }
 
         public void Delete(DataSet dataSet, SqlDataAdapter adapter, int id)
