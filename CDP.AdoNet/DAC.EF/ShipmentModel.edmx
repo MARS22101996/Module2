@@ -1,0 +1,723 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="mariia_suvalova_cdp2017q1Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cargo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CargoName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CargoWeight" Type="float" Nullable="false" />
+          <Property Name="Volume" Type="float" Nullable="false" />
+          <Property Name="SenderId" Type="int" Nullable="false" />
+          <Property Name="RecipientId" Type="int" Nullable="false" />
+          <Property Name="RouteId" Type="int" Nullable="false" />
+          <Property Name="PriceOfCargo" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="CellPhone" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Driver">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Birthdate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DriverTruck">
+          <Key>
+            <PropertyRef Name="TruckId" />
+            <PropertyRef Name="DriverId" />
+          </Key>
+          <Property Name="TruckId" Type="int" Nullable="false" />
+          <Property Name="DriverId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RouteOfCargo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OriginWarehouseId" Type="int" Nullable="false" />
+          <Property Name="DestinationWarehouseId" Type="int" Nullable="false" />
+          <Property Name="Distance" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Shipment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="CompletedDate" Type="datetime" />
+          <Property Name="RouteId" Type="int" Nullable="false" />
+          <Property Name="TruckId" Type="int" />
+          <Property Name="DriverId" Type="int" />
+          <Property Name="PriceOfShipment" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="PriceOfTotalCargo" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="ShipmentCargo">
+          <Key>
+            <PropertyRef Name="ShipmentId" />
+            <PropertyRef Name="CargoId" />
+          </Key>
+          <Property Name="ShipmentId" Type="int" Nullable="false" />
+          <Property Name="CargoId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Truck">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Brand" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="RegistrationNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="YearOfTruck" Type="int" Nullable="false" />
+          <Property Name="Payload" Type="float" Nullable="false" />
+          <Property Name="FuelConsumption" Type="float" Nullable="false" />
+          <Property Name="VolumeCargo" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Warehouse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="City" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="State" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'mariia_suvalova_cdp2017q1.dbo.vRandomNumber' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="vRandomNumber">
+          <Property Name="RandomNumber" Type="float" />
+        </EntityType>-->
+        <Association Name="fk_Cargo_RecipientId">
+          <End Role="Contact" Type="Self.Contact" Multiplicity="1" />
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contact">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cargo">
+              <PropertyRef Name="RecipientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Cargo_RouteOfCargo">
+          <End Role="RouteOfCargo" Type="Self.RouteOfCargo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RouteOfCargo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cargo">
+              <PropertyRef Name="RouteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Cargo_SenderId">
+          <End Role="Contact" Type="Self.Contact" Multiplicity="1" />
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contact">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cargo">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_DriverTruck_Driver">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DriverTruck" Type="Self.DriverTruck" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DriverTruck">
+              <PropertyRef Name="DriverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_DriverTruck_Truck">
+          <End Role="Truck" Type="Self.Truck" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DriverTruck" Type="Self.DriverTruck" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truck">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DriverTruck">
+              <PropertyRef Name="TruckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_RouteOfCargo_DestinationWarehouseId">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
+          <End Role="RouteOfCargo" Type="Self.RouteOfCargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RouteOfCargo">
+              <PropertyRef Name="DestinationWarehouseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_RouteOfCargo_OriginWarehouseId">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
+          <End Role="RouteOfCargo" Type="Self.RouteOfCargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RouteOfCargo">
+              <PropertyRef Name="OriginWarehouseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Shipment_DriverTruck">
+          <End Role="DriverTruck" Type="Self.DriverTruck" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Shipment" Type="Self.Shipment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DriverTruck">
+              <PropertyRef Name="TruckId" />
+              <PropertyRef Name="DriverId" />
+            </Principal>
+            <Dependent Role="Shipment">
+              <PropertyRef Name="TruckId" />
+              <PropertyRef Name="DriverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Shipment_RouteOfCargo">
+          <End Role="RouteOfCargo" Type="Self.RouteOfCargo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Shipment" Type="Self.Shipment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RouteOfCargo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Shipment">
+              <PropertyRef Name="RouteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ShipmentCargo_Cargo">
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="1" />
+          <End Role="ShipmentCargo" Type="Self.ShipmentCargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cargo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ShipmentCargo">
+              <PropertyRef Name="CargoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_ShipmentCargo_Shipment">
+          <End Role="Shipment" Type="Self.Shipment" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ShipmentCargo" Type="Self.ShipmentCargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Shipment">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ShipmentCargo">
+              <PropertyRef Name="ShipmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_checkVolume" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="ShipmentID" Type="int" Mode="In" />
+          <Parameter Name="TruckID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="fn_checkWeight" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
+          <Parameter Name="ShipmentID" Type="int" Mode="In" />
+          <Parameter Name="TruckID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="fn_randomValueFromOne" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="float">
+          <Parameter Name="Max" Type="int" Mode="In" />
+        </Function>
+        <Function Name="fn_randomValueFromTo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="float">
+          <Parameter Name="Min" Type="int" Mode="In" />
+          <Parameter Name="Max" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="mariia_suvalova_cdp2017q1ModelStoreContainer">
+          <EntitySet Name="Cargo" EntityType="Self.Cargo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Contact" EntityType="Self.Contact" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Driver" EntityType="Self.Driver" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DriverTruck" EntityType="Self.DriverTruck" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RouteOfCargo" EntityType="Self.RouteOfCargo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Shipment" EntityType="Self.Shipment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShipmentCargo" EntityType="Self.ShipmentCargo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Truck" EntityType="Self.Truck" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_Cargo_RecipientId" Association="Self.fk_Cargo_RecipientId">
+            <End Role="Contact" EntitySet="Contact" />
+            <End Role="Cargo" EntitySet="Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Cargo_RouteOfCargo" Association="Self.fk_Cargo_RouteOfCargo">
+            <End Role="RouteOfCargo" EntitySet="RouteOfCargo" />
+            <End Role="Cargo" EntitySet="Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Cargo_SenderId" Association="Self.fk_Cargo_SenderId">
+            <End Role="Contact" EntitySet="Contact" />
+            <End Role="Cargo" EntitySet="Cargo" />
+          </AssociationSet>
+          <AssociationSet Name="fk_DriverTruck_Driver" Association="Self.fk_DriverTruck_Driver">
+            <End Role="Driver" EntitySet="Driver" />
+            <End Role="DriverTruck" EntitySet="DriverTruck" />
+          </AssociationSet>
+          <AssociationSet Name="fk_DriverTruck_Truck" Association="Self.fk_DriverTruck_Truck">
+            <End Role="Truck" EntitySet="Truck" />
+            <End Role="DriverTruck" EntitySet="DriverTruck" />
+          </AssociationSet>
+          <AssociationSet Name="fk_RouteOfCargo_DestinationWarehouseId" Association="Self.fk_RouteOfCargo_DestinationWarehouseId">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="RouteOfCargo" EntitySet="RouteOfCargo" />
+          </AssociationSet>
+          <AssociationSet Name="fk_RouteOfCargo_OriginWarehouseId" Association="Self.fk_RouteOfCargo_OriginWarehouseId">
+            <End Role="Warehouse" EntitySet="Warehouse" />
+            <End Role="RouteOfCargo" EntitySet="RouteOfCargo" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Shipment_DriverTruck" Association="Self.fk_Shipment_DriverTruck">
+            <End Role="DriverTruck" EntitySet="DriverTruck" />
+            <End Role="Shipment" EntitySet="Shipment" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Shipment_RouteOfCargo" Association="Self.fk_Shipment_RouteOfCargo">
+            <End Role="RouteOfCargo" EntitySet="RouteOfCargo" />
+            <End Role="Shipment" EntitySet="Shipment" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ShipmentCargo_Cargo" Association="Self.fk_ShipmentCargo_Cargo">
+            <End Role="Cargo" EntitySet="Cargo" />
+            <End Role="ShipmentCargo" EntitySet="ShipmentCargo" />
+          </AssociationSet>
+          <AssociationSet Name="fk_ShipmentCargo_Shipment" Association="Self.fk_ShipmentCargo_Shipment">
+            <End Role="Shipment" EntitySet="Shipment" />
+            <End Role="ShipmentCargo" EntitySet="ShipmentCargo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="mariia_suvalova_cdp2017q1Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Cargo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CargoName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CargoWeight" Type="Double" Nullable="false" />
+          <Property Name="Volume" Type="Double" Nullable="false" />
+          <Property Name="SenderId" Type="Int32" Nullable="false" />
+          <Property Name="RecipientId" Type="Int32" Nullable="false" />
+          <Property Name="RouteId" Type="Int32" Nullable="false" />
+          <Property Name="PriceOfCargo" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Contact" Relationship="Self.fk_Cargo_RecipientId" FromRole="Cargo" ToRole="Contact" />
+          <NavigationProperty Name="RouteOfCargo" Relationship="Self.fk_Cargo_RouteOfCargo" FromRole="Cargo" ToRole="RouteOfCargo" />
+          <NavigationProperty Name="Contact1" Relationship="Self.fk_Cargo_SenderId" FromRole="Cargo" ToRole="Contact" />
+          <NavigationProperty Name="Shipments" Relationship="Self.ShipmentCargo" FromRole="Cargo" ToRole="Shipment" />
+        </EntityType>
+        <EntityType Name="Contact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CellPhone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Cargoes" Relationship="Self.fk_Cargo_RecipientId" FromRole="Contact" ToRole="Cargo" />
+          <NavigationProperty Name="Cargoes1" Relationship="Self.fk_Cargo_SenderId" FromRole="Contact" ToRole="Cargo" />
+        </EntityType>
+        <EntityType Name="Driver">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Birthdate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="DriverTrucks" Relationship="Self.fk_DriverTruck_Driver" FromRole="Driver" ToRole="DriverTruck" />
+        </EntityType>
+        <EntityType Name="DriverTruck">
+          <Key>
+            <PropertyRef Name="TruckId" />
+            <PropertyRef Name="DriverId" />
+          </Key>
+          <Property Name="TruckId" Type="Int32" Nullable="false" />
+          <Property Name="DriverId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Driver" Relationship="Self.fk_DriverTruck_Driver" FromRole="DriverTruck" ToRole="Driver" />
+          <NavigationProperty Name="Truck" Relationship="Self.fk_DriverTruck_Truck" FromRole="DriverTruck" ToRole="Truck" />
+          <NavigationProperty Name="Shipments" Relationship="Self.fk_Shipment_DriverTruck" FromRole="DriverTruck" ToRole="Shipment" />
+        </EntityType>
+        <EntityType Name="RouteOfCargo">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OriginWarehouseId" Type="Int32" Nullable="false" />
+          <Property Name="DestinationWarehouseId" Type="Int32" Nullable="false" />
+          <Property Name="Distance" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Cargoes" Relationship="Self.fk_Cargo_RouteOfCargo" FromRole="RouteOfCargo" ToRole="Cargo" />
+          <NavigationProperty Name="Warehouse" Relationship="Self.fk_RouteOfCargo_DestinationWarehouseId" FromRole="RouteOfCargo" ToRole="Warehouse" />
+          <NavigationProperty Name="Warehouse1" Relationship="Self.fk_RouteOfCargo_OriginWarehouseId" FromRole="RouteOfCargo" ToRole="Warehouse" />
+          <NavigationProperty Name="Shipments" Relationship="Self.fk_Shipment_RouteOfCargo" FromRole="RouteOfCargo" ToRole="Shipment" />
+        </EntityType>
+        <EntityType Name="Shipment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CompletedDate" Type="DateTime" Precision="3" />
+          <Property Name="RouteId" Type="Int32" Nullable="false" />
+          <Property Name="TruckId" Type="Int32" />
+          <Property Name="DriverId" Type="Int32" />
+          <Property Name="PriceOfShipment" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="PriceOfTotalCargo" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="DriverTruck" Relationship="Self.fk_Shipment_DriverTruck" FromRole="Shipment" ToRole="DriverTruck" />
+          <NavigationProperty Name="RouteOfCargo" Relationship="Self.fk_Shipment_RouteOfCargo" FromRole="Shipment" ToRole="RouteOfCargo" />
+          <NavigationProperty Name="Cargoes" Relationship="Self.ShipmentCargo" FromRole="Shipment" ToRole="Cargo" />
+        </EntityType>
+        <EntityType Name="Truck">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Brand" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RegistrationNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="YearOfTruck" Type="Int32" Nullable="false" />
+          <Property Name="Payload" Type="Double" Nullable="false" />
+          <Property Name="FuelConsumption" Type="Double" Nullable="false" />
+          <Property Name="VolumeCargo" Type="Double" Nullable="false" />
+          <NavigationProperty Name="DriverTrucks" Relationship="Self.fk_DriverTruck_Truck" FromRole="Truck" ToRole="DriverTruck" />
+        </EntityType>
+        <EntityType Name="Warehouse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="RouteOfCargoes" Relationship="Self.fk_RouteOfCargo_DestinationWarehouseId" FromRole="Warehouse" ToRole="RouteOfCargo" />
+          <NavigationProperty Name="RouteOfCargoes1" Relationship="Self.fk_RouteOfCargo_OriginWarehouseId" FromRole="Warehouse" ToRole="RouteOfCargo" />
+        </EntityType>
+        <Association Name="fk_Cargo_RecipientId">
+          <End Role="Contact" Type="Self.Contact" Multiplicity="1" />
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contact">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cargo">
+              <PropertyRef Name="RecipientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Cargo_RouteOfCargo">
+          <End Role="RouteOfCargo" Type="Self.RouteOfCargo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RouteOfCargo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cargo">
+              <PropertyRef Name="RouteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Cargo_SenderId">
+          <End Role="Contact" Type="Self.Contact" Multiplicity="1" />
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Contact">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Cargo">
+              <PropertyRef Name="SenderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_DriverTruck_Driver">
+          <End Role="Driver" Type="Self.Driver" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DriverTruck" Type="Self.DriverTruck" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Driver">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DriverTruck">
+              <PropertyRef Name="DriverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_DriverTruck_Truck">
+          <End Role="Truck" Type="Self.Truck" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="DriverTruck" Type="Self.DriverTruck" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Truck">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="DriverTruck">
+              <PropertyRef Name="TruckId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Shipment_DriverTruck">
+          <End Role="DriverTruck" Type="Self.DriverTruck" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Shipment" Type="Self.Shipment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DriverTruck">
+              <PropertyRef Name="TruckId" />
+              <PropertyRef Name="DriverId" />
+            </Principal>
+            <Dependent Role="Shipment">
+              <PropertyRef Name="TruckId" />
+              <PropertyRef Name="DriverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_RouteOfCargo_DestinationWarehouseId">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
+          <End Role="RouteOfCargo" Type="Self.RouteOfCargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RouteOfCargo">
+              <PropertyRef Name="DestinationWarehouseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_RouteOfCargo_OriginWarehouseId">
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
+          <End Role="RouteOfCargo" Type="Self.RouteOfCargo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Warehouse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RouteOfCargo">
+              <PropertyRef Name="OriginWarehouseId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_Shipment_RouteOfCargo">
+          <End Role="RouteOfCargo" Type="Self.RouteOfCargo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Shipment" Type="Self.Shipment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RouteOfCargo">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Shipment">
+              <PropertyRef Name="RouteId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ShipmentCargo">
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="*" />
+          <End Role="Shipment" Type="Self.Shipment" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="mariia_suvalova_cdp2017q1Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Cargoes" EntityType="Self.Cargo" />
+          <EntitySet Name="Contacts" EntityType="Self.Contact" />
+          <EntitySet Name="Drivers" EntityType="Self.Driver" />
+          <EntitySet Name="DriverTrucks" EntityType="Self.DriverTruck" />
+          <EntitySet Name="RouteOfCargoes" EntityType="Self.RouteOfCargo" />
+          <EntitySet Name="Shipments" EntityType="Self.Shipment" />
+          <EntitySet Name="Trucks" EntityType="Self.Truck" />
+          <EntitySet Name="Warehouses" EntityType="Self.Warehouse" />
+          <AssociationSet Name="fk_Cargo_RecipientId" Association="Self.fk_Cargo_RecipientId">
+            <End Role="Contact" EntitySet="Contacts" />
+            <End Role="Cargo" EntitySet="Cargoes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Cargo_RouteOfCargo" Association="Self.fk_Cargo_RouteOfCargo">
+            <End Role="RouteOfCargo" EntitySet="RouteOfCargoes" />
+            <End Role="Cargo" EntitySet="Cargoes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Cargo_SenderId" Association="Self.fk_Cargo_SenderId">
+            <End Role="Contact" EntitySet="Contacts" />
+            <End Role="Cargo" EntitySet="Cargoes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_DriverTruck_Driver" Association="Self.fk_DriverTruck_Driver">
+            <End Role="Driver" EntitySet="Drivers" />
+            <End Role="DriverTruck" EntitySet="DriverTrucks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_DriverTruck_Truck" Association="Self.fk_DriverTruck_Truck">
+            <End Role="Truck" EntitySet="Trucks" />
+            <End Role="DriverTruck" EntitySet="DriverTrucks" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Shipment_DriverTruck" Association="Self.fk_Shipment_DriverTruck">
+            <End Role="DriverTruck" EntitySet="DriverTrucks" />
+            <End Role="Shipment" EntitySet="Shipments" />
+          </AssociationSet>
+          <AssociationSet Name="fk_RouteOfCargo_DestinationWarehouseId" Association="Self.fk_RouteOfCargo_DestinationWarehouseId">
+            <End Role="Warehouse" EntitySet="Warehouses" />
+            <End Role="RouteOfCargo" EntitySet="RouteOfCargoes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_RouteOfCargo_OriginWarehouseId" Association="Self.fk_RouteOfCargo_OriginWarehouseId">
+            <End Role="Warehouse" EntitySet="Warehouses" />
+            <End Role="RouteOfCargo" EntitySet="RouteOfCargoes" />
+          </AssociationSet>
+          <AssociationSet Name="fk_Shipment_RouteOfCargo" Association="Self.fk_Shipment_RouteOfCargo">
+            <End Role="RouteOfCargo" EntitySet="RouteOfCargoes" />
+            <End Role="Shipment" EntitySet="Shipments" />
+          </AssociationSet>
+          <AssociationSet Name="ShipmentCargo" Association="Self.ShipmentCargo">
+            <End Role="Cargo" EntitySet="Cargoes" />
+            <End Role="Shipment" EntitySet="Shipments" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="mariia_suvalova_cdp2017q1ModelStoreContainer" CdmEntityContainer="mariia_suvalova_cdp2017q1Entities">
+          <EntitySetMapping Name="Cargoes">
+            <EntityTypeMapping TypeName="mariia_suvalova_cdp2017q1Model.Cargo">
+              <MappingFragment StoreEntitySet="Cargo">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CargoName" ColumnName="CargoName" />
+                <ScalarProperty Name="CargoWeight" ColumnName="CargoWeight" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="SenderId" ColumnName="SenderId" />
+                <ScalarProperty Name="RecipientId" ColumnName="RecipientId" />
+                <ScalarProperty Name="RouteId" ColumnName="RouteId" />
+                <ScalarProperty Name="PriceOfCargo" ColumnName="PriceOfCargo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Contacts">
+            <EntityTypeMapping TypeName="mariia_suvalova_cdp2017q1Model.Contact">
+              <MappingFragment StoreEntitySet="Contact">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="CellPhone" ColumnName="CellPhone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Drivers">
+            <EntityTypeMapping TypeName="mariia_suvalova_cdp2017q1Model.Driver">
+              <MappingFragment StoreEntitySet="Driver">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Birthdate" ColumnName="Birthdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DriverTrucks">
+            <EntityTypeMapping TypeName="mariia_suvalova_cdp2017q1Model.DriverTruck">
+              <MappingFragment StoreEntitySet="DriverTruck">
+                <ScalarProperty Name="TruckId" ColumnName="TruckId" />
+                <ScalarProperty Name="DriverId" ColumnName="DriverId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RouteOfCargoes">
+            <EntityTypeMapping TypeName="mariia_suvalova_cdp2017q1Model.RouteOfCargo">
+              <MappingFragment StoreEntitySet="RouteOfCargo">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OriginWarehouseId" ColumnName="OriginWarehouseId" />
+                <ScalarProperty Name="DestinationWarehouseId" ColumnName="DestinationWarehouseId" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Shipments">
+            <EntityTypeMapping TypeName="mariia_suvalova_cdp2017q1Model.Shipment">
+              <MappingFragment StoreEntitySet="Shipment">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="CompletedDate" ColumnName="CompletedDate" />
+                <ScalarProperty Name="RouteId" ColumnName="RouteId" />
+                <ScalarProperty Name="TruckId" ColumnName="TruckId" />
+                <ScalarProperty Name="DriverId" ColumnName="DriverId" />
+                <ScalarProperty Name="PriceOfShipment" ColumnName="PriceOfShipment" />
+                <ScalarProperty Name="PriceOfTotalCargo" ColumnName="PriceOfTotalCargo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trucks">
+            <EntityTypeMapping TypeName="mariia_suvalova_cdp2017q1Model.Truck">
+              <MappingFragment StoreEntitySet="Truck">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Brand" ColumnName="Brand" />
+                <ScalarProperty Name="RegistrationNumber" ColumnName="RegistrationNumber" />
+                <ScalarProperty Name="YearOfTruck" ColumnName="YearOfTruck" />
+                <ScalarProperty Name="Payload" ColumnName="Payload" />
+                <ScalarProperty Name="FuelConsumption" ColumnName="FuelConsumption" />
+                <ScalarProperty Name="VolumeCargo" ColumnName="VolumeCargo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Warehouses">
+            <EntityTypeMapping TypeName="mariia_suvalova_cdp2017q1Model.Warehouse">
+              <MappingFragment StoreEntitySet="Warehouse">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ShipmentCargo" TypeName="mariia_suvalova_cdp2017q1Model.ShipmentCargo" StoreEntitySet="ShipmentCargo">
+            <EndProperty Name="Cargo">
+              <ScalarProperty Name="Id" ColumnName="CargoId" />
+            </EndProperty>
+            <EndProperty Name="Shipment">
+              <ScalarProperty Name="Id" ColumnName="ShipmentId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

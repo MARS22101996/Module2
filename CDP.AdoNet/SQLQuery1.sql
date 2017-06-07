@@ -1,0 +1,2 @@
+﻿DELETE FROM RouteOfCargo
+WHERE Id>1;
