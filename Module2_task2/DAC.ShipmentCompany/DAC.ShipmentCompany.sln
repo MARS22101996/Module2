@@ -5,9 +5,9 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC.ShipmentCompany", "DAC.ShipmentCompany\DAC.ShipmentCompany.csproj", "{8A2CDB71-660A-4C08-AE78-687740947A9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC.Dapper", "..\..\CDP.AdoNet\DAC.Dapper\DAC.Dapper.csproj", "{EC84EB4E-0D7F-49D5-8E27-0813D26B6A5B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC.Dapper", "DAC.Dapper\DAC.Dapper.csproj", "{EC84EB4E-0D7F-49D5-8E27-0813D26B6A5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC.EF", "..\..\CDP.AdoNet\DAC.EF\DAC.EF.csproj", "{30E58AAA-FB60-4870-AB0C-B581BE9632A7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC.EF", "DAC.EF\DAC.EF.csproj", "{30E58AAA-FB60-4870-AB0C-B581BE9632A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
