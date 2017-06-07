@@ -8,8 +8,7 @@ namespace DAC.EF.Interfaces
         void Update(RouteOfCargo item);
         void Delete(int id);
         IEnumerable<RouteOfCargo> GetAll();
-        RouteOfCargo GetById(int originId, int? destinationId);
-
+        RouteOfCargo GetById(int id);
         void Save();
     }
 }

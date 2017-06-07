@@ -20,10 +20,9 @@ namespace DAC.EF.Repositories
             return _context.RouteOfCargoes.ToList();
         }
 
-        public RouteOfCargo GetById(int originId, int? destinationId)
+        public RouteOfCargo GetById(int id)
         {
-            //return _context.RouteOfCargoes.FirstOrDefault(x=>x.OriginWarehouseId==originId && x.DestinationWarehouseId == destinationId);
-            return _context.RouteOfCargoes.FirstOrDefault(x => x.Id ==originId);
+            return _context.RouteOfCargoes.FirstOrDefault(x => x.Id == id);
         }
 
         public void Create(RouteOfCargo item)

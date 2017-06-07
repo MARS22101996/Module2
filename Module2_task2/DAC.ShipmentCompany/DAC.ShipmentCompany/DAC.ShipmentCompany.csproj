@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{30E58AAA-FB60-4870-AB0C-B581BE9632A7}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{8A2CDB71-660A-4C08-AE78-687740947A9C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DAC.EF</RootNamespace>
-    <AssemblyName>DAC.EF</AssemblyName>
+    <RootNamespace>DAC.ShipmentCompany</RootNamespace>
+    <AssemblyName>DAC.ShipmentCompany</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -40,10 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,77 +52,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cargo.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Contact.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Driver.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DriverTruck.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Interfaces\IRoutesRepository.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\RouteRepositoryEF.cs" />
-    <Compile Include="RouteOfCargo.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Shipment.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ShipmentModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShipmentModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ShipmentModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ShipmentModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShipmentModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Truck.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Warehouse.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="ShipmentModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ShipmentModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="ShipmentModel.edmx.diagram">
-      <DependentUpon>ShipmentModel.edmx</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ShipmentModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ShipmentModel.Context.cs</LastGenOutput>
-      <DependentUpon>ShipmentModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="ShipmentModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ShipmentModel.edmx</DependentUpon>
-      <LastGenOutput>ShipmentModel.cs</LastGenOutput>
-    </Content>
+    <ProjectReference Include="..\..\..\CDP.AdoNet\DAC.Dapper\DAC.Dapper.csproj">
+      <Project>{EC84EB4E-0D7F-49D5-8E27-0813D26B6A5B}</Project>
+      <Name>DAC.Dapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\CDP.AdoNet\DAC.EF\DAC.EF.csproj">
+      <Project>{30E58AAA-FB60-4870-AB0C-B581BE9632A7}</Project>
+      <Name>DAC.EF</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

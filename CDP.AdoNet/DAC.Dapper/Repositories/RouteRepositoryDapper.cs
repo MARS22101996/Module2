@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using DapperExtensions;
 using DAC.Dapper.Interfaces;
 using DAC.Dapper.Models;
-
 
 namespace DAC.Dapper.Repositories
 {
@@ -13,7 +13,7 @@ namespace DAC.Dapper.Repositories
 
         public RouteRepositoryDapper()
         {
-            _connectionString = @"Server=(localdb)\mssqllocaldb;Database=mariia_suvalova_cdp2017q1;Trusted_Connection=True;";
+            _connectionString = ConfigurationManager.ConnectionStrings["CDPDatabase"].ToString();
         }
 
         public IEnumerable<RouteOfCargo> GetAll()
@@ -28,13 +28,13 @@ namespace DAC.Dapper.Repositories
             return list;
         }
 
-        public RouteOfCargo GetById(int originId, int? destinationId)
+        public RouteOfCargo GetById(int id)
         {
             RouteOfCargo route;
             using (var cn = new SqlConnection(_connectionString))
             {
                 cn.Open();
-                route = cn.Get<RouteOfCargo>(originId);
+                route = cn.Get<RouteOfCargo>(id);
                 cn.Close();
             }
             return route;
