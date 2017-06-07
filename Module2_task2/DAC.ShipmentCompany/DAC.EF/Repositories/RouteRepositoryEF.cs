@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using DAC.EF.Interfaces;
+using DAC.EF.Model;
 
 namespace DAC.EF.Repositories
 {

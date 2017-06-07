@@ -52,10 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cargo.cs" />
-    <Compile Include="Contact.cs" />
-    <Compile Include="Driver.cs" />
-    <Compile Include="DriverTruck.cs" />
+    <Compile Include="Model\Cargo.cs" />
+    <Compile Include="Model\Contact.cs" />
+    <Compile Include="Model\Driver.cs" />
+    <Compile Include="Model\DriverTruck.cs" />
     <Compile Include="Interfaces\IRoutesRepository.cs" />
     <Compile Include="Migrations\201706071515430_InitialCreate.cs" />
     <Compile Include="Migrations\201706071515430_InitialCreate.Designer.cs">
@@ -67,12 +67,12 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\RouteRepositoryEF.cs" />
-    <Compile Include="RouteOfCargo.cs" />
-    <Compile Include="Shipment.cs" />
-    <Compile Include="ShipmentContext.cs" />
-    <Compile Include="Truck.cs" />
-    <Compile Include="Warehouse.cs" />
+    <Compile Include="Repositories\RouteRepositoryEf.cs" />
+    <Compile Include="Model\RouteOfCargo.cs" />
+    <Compile Include="Model\Shipment.cs" />
+    <Compile Include="Model\ShipmentContext.cs" />
+    <Compile Include="Model\Truck.cs" />
+    <Compile Include="Model\Warehouse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
@@ -89,6 +89,7 @@
       <DependentUpon>201706071556519_AddedAddress.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

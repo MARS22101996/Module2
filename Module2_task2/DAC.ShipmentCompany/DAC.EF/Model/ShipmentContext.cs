@@ -1,3 +1,5 @@
+using DAC.EF.Model;
+
 namespace DAC.EF
 {
     using System;
