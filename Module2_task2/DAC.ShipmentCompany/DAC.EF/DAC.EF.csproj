@@ -52,77 +52,43 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cargo.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Contact.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Driver.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DriverTruck.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Cargo.cs" />
+    <Compile Include="Contact.cs" />
+    <Compile Include="Driver.cs" />
+    <Compile Include="DriverTruck.cs" />
     <Compile Include="Interfaces\IRoutesRepository.cs" />
+    <Compile Include="Migrations\201706071515430_InitialCreate.cs" />
+    <Compile Include="Migrations\201706071515430_InitialCreate.Designer.cs">
+      <DependentUpon>201706071515430_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201706071556519_AddedAddress.cs" />
+    <Compile Include="Migrations\201706071556519_AddedAddress.Designer.cs">
+      <DependentUpon>201706071556519_AddedAddress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\RouteRepositoryEF.cs" />
-    <Compile Include="RouteOfCargo.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Shipment.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ShipmentModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShipmentModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ShipmentModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ShipmentModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShipmentModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Truck.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Warehouse.cs">
-      <DependentUpon>ShipmentModel.tt</DependentUpon>
-    </Compile>
+    <Compile Include="RouteOfCargo.cs" />
+    <Compile Include="Shipment.cs" />
+    <Compile Include="ShipmentContext.cs" />
+    <Compile Include="Truck.cs" />
+    <Compile Include="Warehouse.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="ShipmentModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ShipmentModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
+    <None Include="App.Config" />
     <None Include="packages.config" />
-    <None Include="ShipmentModel.edmx.diagram">
-      <DependentUpon>ShipmentModel.edmx</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ShipmentModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ShipmentModel.Context.cs</LastGenOutput>
-      <DependentUpon>ShipmentModel.edmx</DependentUpon>
-    </Content>
-    <Content Include="ShipmentModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ShipmentModel.edmx</DependentUpon>
-      <LastGenOutput>ShipmentModel.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201706071515430_InitialCreate.resx">
+      <DependentUpon>201706071515430_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201706071556519_AddedAddress.resx">
+      <DependentUpon>201706071556519_AddedAddress.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
