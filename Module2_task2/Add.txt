@@ -1,0 +1,4 @@
+Performance for each tests for retrieving all data using Dapper an EF repository
+1 attempt: EF - 2649 ms, Dapper - 76 ms
+2 attempt: EF - 488 ms , Dapper - 74 ms
+3 attempt: EF - 438 ms , Dapper - 74 ms
