@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DAC.EF.Model
+namespace DAC.EF.Models
 {
     [Table("DriverTruck")]
     public partial class DriverTruck

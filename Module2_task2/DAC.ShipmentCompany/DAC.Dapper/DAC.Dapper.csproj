@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IRoutesRepository.cs" />
+    <Compile Include="Interfaces\IRouteRepositoryDapper.cs" />
     <Compile Include="Models\RouteOfCargo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\RouteRepositoryDapper.cs" />

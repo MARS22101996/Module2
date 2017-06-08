@@ -1,4 +1,4 @@
-using DAC.EF.Model;
+using DAC.EF.Models;
 
 namespace DAC.EF
 {

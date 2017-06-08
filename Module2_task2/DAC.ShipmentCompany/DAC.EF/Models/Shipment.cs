@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DAC.EF.Model
+namespace DAC.EF.Models
 {
     [Table("Shipment")]
     public partial class Shipment

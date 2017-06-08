@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using DAC.EF.Model;
+using DAC.EF.Models;
 
 namespace DAC.EF.Interfaces
 {

@@ -7,67 +7,67 @@ using DAC.Dapper.Models;
 
 namespace DAC.Dapper.Repositories
 {
-    public class RouteRepositoryDapper: IRoutesRepository
+    public class RouteRepositoryDapper: IRouteRepositoryDapper
     {
-        private readonly string _connectionString;
+        private readonly SqlConnection _connection;
 
         public RouteRepositoryDapper()
         {
-            _connectionString = ConfigurationManager.ConnectionStrings["CDPDatabase"].ToString();
+            _connection = new SqlConnection(ConfigurationManager.ConnectionStrings["CDPDatabase"].ToString());
         }
 
         public IEnumerable<RouteOfCargo> GetAll()
         {
-            IEnumerable<RouteOfCargo> list;
-            using (var cn = new SqlConnection(_connectionString))
+            IEnumerable<RouteOfCargo> routes;
+            using (var connection = _connection)
             {
-                cn.Open();
-                list = cn.GetList<RouteOfCargo>();
-                cn.Close();
+                connection.Open();
+                routes = connection.GetList<RouteOfCargo>();
+                connection.Close();
             }
-            return list;
+            return routes;
         }
 
         public RouteOfCargo GetById(int id)
         {
             RouteOfCargo route;
-            using (var cn = new SqlConnection(_connectionString))
+            using (var connection = _connection)
             {
-                cn.Open();
-                route = cn.Get<RouteOfCargo>(id);
-                cn.Close();
+                connection.Open();
+                route = connection.Get<RouteOfCargo>(id);
+                connection.Close();
             }
             return route;
         }
 
         public void Create(RouteOfCargo item)
         {
-            using (var cn = new SqlConnection(_connectionString))
+            using (var connection = _connection)
             {
-                cn.Open();
-                cn.Insert(item);
-                cn.Close();
+                connection.Open();
+                connection.Insert(item);
+                connection.Close();
             }
         }
 
         public void Delete(int id)
         {
-            using (var cn = new SqlConnection(_connectionString))
+            using (var connection = _connection)
             {
-                cn.Open();
-                var item = cn.Get<RouteOfCargo>(id);
-                cn.Delete(item);
-                cn.Close();
+                connection.Open();
+                var item = connection.Get<RouteOfCargo>(id);
+                connection.Delete(item);
+                connection.Close();
             }
         }
 
         public void Update(RouteOfCargo item)
         {
-            using (var cn = new SqlConnection(_connectionString))
+            using (var connection = _connection)
             {
-                cn.Open();
-                cn.Update(item);
-                cn.Close();
+                connection.Open();
+                connection.Update(item);
+                connection.Close();
             }
         }
     }

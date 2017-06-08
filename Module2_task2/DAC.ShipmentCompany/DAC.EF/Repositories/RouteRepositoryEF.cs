@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using DAC.EF.Interfaces;
-using DAC.EF.Model;
+using DAC.EF.Models;
 
 namespace DAC.EF.Repositories
 {
@@ -18,7 +18,7 @@ namespace DAC.EF.Repositories
 
         public IEnumerable<RouteOfCargo> GetAll()
         {
-            return _context.RouteOfCargoes.ToList();
+            return _context.RouteOfCargoes;
         }
 
         public RouteOfCargo GetById(int id)
@@ -50,11 +50,9 @@ namespace DAC.EF.Repositories
 
         public void Dispose()
         {
-            if (_context != null)
-            {
-                _context.Dispose();
-                _context = null;
-            }
+            if (_context == null) return;
+            _context.Dispose();
+            _context = null;
         }
     }
 }

@@ -1,38 +1,34 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DAC.EF.Model
+namespace DAC.EF.Models
 {
-    [Table("Contact")]
-    public partial class Contact
+    [Table("RouteOfCargo")]
+    public partial class RouteOfCargo
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Contact()
+        public RouteOfCargo()
         {
             Cargoes = new HashSet<Cargo>();
-            Cargoes1 = new HashSet<Cargo>();
+            Shipments = new HashSet<Shipment>();
         }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int Id { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string FirstName { get; set; }
+        public int OriginWarehouseId { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string LastName { get; set; }
+        public int DestinationWarehouseId { get; set; }
 
-        [Required]
-        [StringLength(50)]
-        public string CellPhone { get; set; }
+        public double Distance { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cargo> Cargoes { get; set; }
 
+        public virtual Warehouse Warehouse { get; set; }
+
+        public virtual Warehouse Warehouse1 { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Cargo> Cargoes1 { get; set; }
+        public virtual ICollection<Shipment> Shipments { get; set; }
     }
 }

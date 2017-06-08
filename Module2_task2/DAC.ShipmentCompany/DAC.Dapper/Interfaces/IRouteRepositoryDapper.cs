@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DAC.Dapper.Interfaces
 {
-    public interface IRoutesRepository
+    public interface IRouteRepositoryDapper
     {
         void Create(RouteOfCargo item);
         void Update(RouteOfCargo item);
