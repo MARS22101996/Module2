@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC.ShipmentCompany", "DAC.ShipmentCompany\DAC.ShipmentCompany.csproj", "{8A2CDB71-660A-4C08-AE78-687740947A9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC", "DAC\DAC.csproj", "{8A2CDB71-660A-4C08-AE78-687740947A9C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC.Dapper", "DAC.Dapper\DAC.Dapper.csproj", "{EC84EB4E-0D7F-49D5-8E27-0813D26B6A5B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC.EF", "DAC.EF\DAC.EF.csproj", "{30E58AAA-FB60-4870-AB0C-B581BE9632A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC.AdoNet", "DAC.AdoNet\DAC.AdoNet.csproj", "{6D46C4F5-882F-4960-9300-131171862FAF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAC.AdoNet.Tests", "DAC.AdoNet.Tests\DAC.AdoNet.Tests.csproj", "{D1834A7E-54E2-4C1E-AFA3-E7915F5D688A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{30E58AAA-FB60-4870-AB0C-B581BE9632A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30E58AAA-FB60-4870-AB0C-B581BE9632A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30E58AAA-FB60-4870-AB0C-B581BE9632A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D46C4F5-882F-4960-9300-131171862FAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D46C4F5-882F-4960-9300-131171862FAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D46C4F5-882F-4960-9300-131171862FAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D46C4F5-882F-4960-9300-131171862FAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1834A7E-54E2-4C1E-AFA3-E7915F5D688A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1834A7E-54E2-4C1E-AFA3-E7915F5D688A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1834A7E-54E2-4C1E-AFA3-E7915F5D688A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1834A7E-54E2-4C1E-AFA3-E7915F5D688A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

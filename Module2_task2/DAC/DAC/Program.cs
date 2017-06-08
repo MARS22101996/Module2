@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using DAC.EF.Repositories;
-using DAC.EF;
 using DAC.Dapper.Repositories;
+using DAC.EF;
+using DAC.EF.Repositories;
 
 namespace DAC.ShipmentCompany
 {

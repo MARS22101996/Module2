@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DAC.ShipmentCompany")]
+[assembly: AssemblyTitle("CDP.AdoNet.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("EPAM Systems")]
-[assembly: AssemblyProduct("DAC.ShipmentCompany")]
+[assembly: AssemblyProduct("CDP.AdoNet.Tests")]
 [assembly: AssemblyCopyright("Copyright © EPAM Systems 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("8a2cdb71-660a-4c08-ae78-687740947a9c")]
+[assembly: Guid("d1834a7e-54e2-4c1e-afa3-e7915f5d688a")]
 
 // Version information for an assembly consists of the following four values:
 //
