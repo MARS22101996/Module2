@@ -10,6 +10,8 @@ namespace DAC.Shipment
     {
         static void Main(string[] args)
         {
+            //test comment
+
             //    using (var repository = new RouteRepositoryEf(new ShipmentContext()))
             //    {
 
