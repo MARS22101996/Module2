@@ -9,6 +9,7 @@ namespace CDP.AdoNet
     {
         static void Main(string[] args)
         {
+            //test svn
             //Connected Warehouse example
             using (var uow = TransactionWrapperFactory.Create())
             {
